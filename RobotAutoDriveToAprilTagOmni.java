@@ -120,6 +120,14 @@ public class RobotAutoDriveToAprilTagOmni extends LinearOpMode
         double  strafe          = 0;        // Desired strafe power/speed (-1 to +1)
         double  turn            = 0;        // Desired turning power/speed (-1 to +1)
 
+        // Initialize IMU
+        IMU imu = hardwareMap.get(IMU.class, "imu");
+        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+                RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
+        ));
+        imu.initialize(parameters);
+
         // Initialize the Apriltag Detection process
         initAprilTag();
 
@@ -225,11 +233,24 @@ public class RobotAutoDriveToAprilTagOmni extends LinearOpMode
      * Positive Yaw is counter-clockwise
      */
     public void moveRobot(double x, double y, double yaw) {
+        double heading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+
+        double powerAdjustmentFactor = 60 / 90;
+
+        double tempX = x * Math.cos(heading) - y * Math.sin(heading);
+        double tempY = x * Math.sin(heading) + y * Math.cos(heading);
+
+        x = tempX;
+        y = tempY;
+
         // Calculate wheel powers.
         double leftFrontPower    =  x -y -yaw;
         double rightFrontPower   =  x +y +yaw;
         double leftBackPower     =  x +y -yaw;
         double rightBackPower    =  x -y +yaw;
+
+        rightFrontPower *= powerAdjustmentFactor;
+        leftBackPower *= powerAdjustmentFactor;
 
         // Normalize wheel powers to be less than 1.0
         double max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
