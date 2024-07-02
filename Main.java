@@ -180,11 +180,11 @@ public class Main extends LinearOpMode{
                 gimbalPitch.setPosition(currentPitch);
             }
             if (gamepad1.dpad_left) {
-                currentYaw += 0.01;
+                currentYaw -= 0.01;
                 gimbalYaw.setPosition(currentYaw);
             }
             if (gamepad1.dpad_right) {
-                currentYaw -= 0.01;
+                currentYaw += 0.01;
                 gimbalYaw.setPosition(currentYaw);
             }
 
