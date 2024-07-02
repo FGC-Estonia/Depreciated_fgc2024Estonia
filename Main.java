@@ -205,7 +205,7 @@ public class Main extends LinearOpMode{
      */
     public void moveRobot(double x, double y, double yaw) {
         double max = Math.max(Math.abs(x) + Math.abs(y), 1);
-        if (gamepad1.left_bumper Not True) {
+        if (!gamepad1.left_bumper) {
             double heading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) + Math.PI / 2;
             double x = x * Math.cos(heading) - y * Math.sin(heading);
             double y = x * Math.sin(heading) + y * Math.cos(heading);
