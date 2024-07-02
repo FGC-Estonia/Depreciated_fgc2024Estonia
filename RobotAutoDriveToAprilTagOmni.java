@@ -205,7 +205,7 @@ public class RobotAutoDriveToAprilTagOmni extends LinearOpMode
             }
             telemetry.update();
 
-            if (gamepad1.dpad_up) {
+            if (gamepad1.dpad_up) { 
                 currentPitch += 0.01;
                 gimbalPitch.setPosition(currentPitch);
             }
@@ -233,20 +233,20 @@ public class RobotAutoDriveToAprilTagOmni extends LinearOpMode
         double max = Math.max(Math.abs(x) + Math.abs(y), 1);
 
         double heading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
-        double adjustedx = -x * Math.cos(heading) + y * Math.sin(heading);
-        double adjustedy = -x * Math.sin(heading) - y * Math.cos(heading);
+        double adjustedx = x * Math.cos(heading) - y * Math.sin(heading);
+        double adjustedy = x * Math.sin(heading) + y * Math.cos(heading);
 
         // Calculate wheel powers.
-        double leftFrontPower    =  (adjustedx + adjustedy +yaw)/max;
-        double leftBackPower     =  (-adjustedx + adjustedy +yaw)/max;
-        double rightFrontPower   =  (-adjustedx + adjustedy -yaw)/max;
-        double rightBackPower    =  (adjustedx + adjustedy -yaw)/max;
+        double leftFrontPower    =  (-adjustedx + adjustedy -yaw)/max;
+        double leftBackPower     =  (adjustedx + adjustedy -yaw)/max;
+        double rightFrontPower   =  (adjustedx + adjustedy +yaw)/max;
+        double rightBackPower    =  (-adjustedx + adjustedy +yaw)/max;
 
         
         // Send powers to the wheels.
         leftFrontDrive.setPower(leftFrontPower);
-        rightFrontDrive.setPower(rightFrontPower);
         leftBackDrive.setPower(leftBackPower);
+        rightFrontDrive.setPower(rightFrontPower);
         rightBackDrive.setPower(rightBackPower);
     }
 
