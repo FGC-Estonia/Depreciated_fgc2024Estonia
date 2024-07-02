@@ -78,7 +78,7 @@ public class Main extends LinearOpMode
     final double MAX_AUTO_TURN  = 0.3;   //  Clip the turn speed to this max value (adjust for your robot)
 
     double currentPitch = 0.5;
-    double currentyaw = 0.5;
+    double currentYaw = 0.5;
 
     private DcMotor leftFrontDrive   = null;  //  Used to control the left front drive wheel
     private DcMotor rightFrontDrive  = null;  //  Used to control the right front drive wheel
