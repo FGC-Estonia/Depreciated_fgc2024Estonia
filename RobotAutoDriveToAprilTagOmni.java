@@ -77,10 +77,14 @@ public class RobotAutoDriveToAprilTagOmni extends LinearOpMode
     final double MAX_AUTO_STRAFE= 0.5;   //  Clip the approach speed to this max value (adjust for your robot)
     final double MAX_AUTO_TURN  = 0.3;   //  Clip the turn speed to this max value (adjust for your robot)
 
+    double currentPitch = 0.5;
+
     private DcMotor leftFrontDrive   = null;  //  Used to control the left front drive wheel
     private DcMotor rightFrontDrive  = null;  //  Used to control the right front drive wheel
     private DcMotor leftBackDrive    = null;  //  Used to control the left back drive wheel
     private DcMotor rightBackDrive   = null;  //  Used to control the right back drive wheel
+
+    private Servo gimbalPitch = null;
 
     private static final boolean USE_WEBCAM = true;  // Set true to use a webcam, or false for a phone camera
     private static final int DESIRED_TAG_ID = -1;     // Choose the tag you want to approach or set to -1 for ANY tag.
@@ -119,6 +123,9 @@ public class RobotAutoDriveToAprilTagOmni extends LinearOpMode
         leftBackDrive  = hardwareMap.get(DcMotor.class, "Motor_Port_1_CH");
         rightBackDrive = hardwareMap.get(DcMotor.class, "Motor_Port_3_CH");
 
+        gimbalPitch = hardwareMap.get(Servo.class, "Servo_Port_0_CH");
+        gimbalPitch.setPosition(currentPitch);
+
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
@@ -129,7 +136,8 @@ public class RobotAutoDriveToAprilTagOmni extends LinearOpMode
 
         if (USE_WEBCAM)
             setManualExposure(6, 250);  // Use low exposure time to reduce motion blur
-
+            
+        imu.resetYaw();
         // Wait for driver to press start
         telemetry.addData("Camera preview on/off", "3 dots, Camera Stream");
         telemetry.addData(">", "Touch Play to start OpMode");
@@ -197,6 +205,15 @@ public class RobotAutoDriveToAprilTagOmni extends LinearOpMode
             }
             telemetry.update();
 
+            if (gamepad1.dpad_up) {
+                currentPitch += 0.01;
+                gimbalPitch.setPosition(currentPitch);
+            }
+            else if (gamepad1.dpad_down) {
+                currentPitch -= 0.01;
+                gimbalPitch.setPosition(currentPitch);
+            }
+
             // Apply desired axes motions to the drivetrain.
             moveRobot(drive, strafe, turn);
             sleep(10);
@@ -213,31 +230,18 @@ public class RobotAutoDriveToAprilTagOmni extends LinearOpMode
      * Positive Yaw is counter-clockwise
      */
     public void moveRobot(double x, double y, double yaw) {
+        double max = Math.max(Math.abs(x) + Math.abs(y), 1);
+
         double heading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
-
-        double tempX = x * Math.cos(heading) - y * Math.sin(heading);
-        double tempY = x * Math.sin(heading) + y * Math.cos(heading);
-
-        x = tempX;
-        y = tempY;
+        double adjustedx = x * Math.cos(heading) - y * Math.sin(heading);
+        double adjustedy = x * Math.sin(heading) + y * Math.cos(heading);
 
         // Calculate wheel powers.
-        double leftFrontPower    =  x -y -yaw;
-        double rightFrontPower   =  x +y +yaw;
-        double leftBackPower     =  x +y -yaw;
-        double rightBackPower    =  x -y +yaw;
+        double leftFrontPower    =  (adjustedx -adjustedy -yaw)/max;
+        double rightFrontPower   =  (adjustedx +adjustedy +yaw)/max;
+        double leftBackPower     =  (adjustedx +adjustedy -yaw)/max;
+        double rightBackPower    =  (adjustedx -adjustedy +yaw)/max;
 
-        // Normalize wheel powers to be less than 1.0
-        double max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
-        max = Math.max(max, Math.abs(leftBackPower));
-        max = Math.max(max, Math.abs(rightBackPower));
-
-        if (max > 1.0) {
-            leftFrontPower /= max;
-            rightFrontPower /= max;
-            leftBackPower /= max;
-            rightBackPower /= max;
-        }
         
         // Send powers to the wheels.
         leftFrontDrive.setPower(leftFrontPower);
@@ -246,7 +250,7 @@ public class RobotAutoDriveToAprilTagOmni extends LinearOpMode
         rightBackDrive.setPower(rightBackPower);
     }
 
-    /**
+        /**
      * Initialize the AprilTag processor.
      */
     private void initAprilTag() {
