@@ -85,6 +85,8 @@ public class RobotAutoDriveToAprilTagOmni extends LinearOpMode
     private AprilTagProcessor aprilTag;              // Used for managing the AprilTag detection process.
     private AprilTagDetection desiredTag = null;     // Used to hold the data for a detected AprilTag
 
+    IMU imu;
+
     @Override public void runOpMode()
     {
         boolean targetFound     = false;    // Set to true when an AprilTag target is detected
@@ -93,12 +95,15 @@ public class RobotAutoDriveToAprilTagOmni extends LinearOpMode
         double  turn            = 0;        // Desired turning power/speed (-1 to +1)
 
         // Initialize IMU
-        IMU imu = hardwareMap.get(IMU.class, "imu");
-        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
-        ));
-        imu.initialize(parameters);
+        imu = hardwareMap.get(IMU.class, "imu");
+        imu.initialize(
+            new IMU.Parameters(
+                new RevHubOrientationOnRobot(
+                    RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                    RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
+                )
+            )
+        );
 
         // Initialize the Apriltag Detection process
         initAprilTag();
