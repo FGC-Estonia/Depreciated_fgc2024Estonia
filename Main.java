@@ -78,6 +78,7 @@ public class Main extends LinearOpMode
     final double MAX_AUTO_TURN  = 0.3;   //  Clip the turn speed to this max value (adjust for your robot)
 
     double currentPitch = 0.5;
+    double currentyaw = 0.5;
 
     private DcMotor leftFrontDrive   = null;  //  Used to control the left front drive wheel
     private DcMotor rightFrontDrive  = null;  //  Used to control the right front drive wheel
@@ -85,6 +86,7 @@ public class Main extends LinearOpMode
     private DcMotor rightBackDrive   = null;  //  Used to control the right back drive wheel
 
     private Servo gimbalPitch = null;
+    private Servo gimbalYaw = null;
 
     private static final boolean USE_WEBCAM = true;  // Set true to use a webcam, or false for a phone camera
     private static final int DESIRED_TAG_ID = -1;     // Choose the tag you want to approach or set to -1 for ANY tag.
@@ -125,6 +127,8 @@ public class Main extends LinearOpMode
 
         gimbalPitch = hardwareMap.get(Servo.class, "Servo_Port_0_CH");
         gimbalPitch.setPosition(currentPitch);
+        gimbalYaw = hardwareMap.get(Servo.class, "Servo_Port_1_CH");
+        gimbalYaw.setPosition(currentYaw);
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
@@ -209,9 +213,17 @@ public class Main extends LinearOpMode
                 currentPitch += 0.01;
                 gimbalPitch.setPosition(currentPitch);
             }
-            else if (gamepad1.dpad_down) {
+            if (gamepad1.dpad_down) {
                 currentPitch -= 0.01;
                 gimbalPitch.setPosition(currentPitch);
+            }
+            if (gamepad1.dpad_left) {
+                currentYaw += 0.01;
+                gimbalYaw.setPosition(currentYaw);
+            }
+            if (gamepad1.dpad_right) {
+                currentYaw -= 0.01;
+                gimbalYaw.setPosition(currentYaw);
             }
 
             // Apply desired axes motions to the drivetrain.
