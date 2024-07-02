@@ -215,7 +215,7 @@ public class Main extends LinearOpMode
             }
 
             // Apply desired axes motions to the drivetrain.
-            moveRobot(drive, strafe, turn);
+            moveRobot(drive, -strafe, turn);
             sleep(10);
         }
     }
@@ -232,7 +232,7 @@ public class Main extends LinearOpMode
     public void moveRobot(double x, double y, double yaw) {
         double max = Math.max(Math.abs(x) + Math.abs(y), 1);
 
-        double heading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        double heading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) + Math.PI / 2;
         double adjustedx = x * Math.cos(heading) - y * Math.sin(heading);
         double adjustedy = x * Math.sin(heading) + y * Math.cos(heading);
 
