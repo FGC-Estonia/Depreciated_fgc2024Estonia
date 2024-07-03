@@ -1,66 +1,40 @@
- package org.firstinspires.ftc.teamcode;
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
+import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 
- import com.qualcomm.robotcore.eventloop.opmode.Disabled;
- import com.qualcomm.robotcore.eventloop.opmode.OpMode;
- import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
- import com.qualcomm.robotcore.util.ElapsedTime;
+@TeleOp(name = "Main")
+public class Main extends LinearOpMode {
+    private BNO055IMU imu;
 
- @TeleOp(name = "Main")
- 
- public class Main extends OpMode {
- 
-   private ElapsedTime runtime = new ElapsedTime();
-   /**
-    * This method will be called once, when the INIT button is pressed.
-    */ 
- 
+    @Override
+    public void runOpMode() {
+        // Initialize the hardware variables
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
 
+        // Set up the parameters for the IMU
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.loggingEnabled = false;
 
-   @Override
-   public void init() {
-     telemetry.addData("Status", "Initialized");
-   }
-   /**
-    * This method will be called repeatedly during the period between when
-    * the init button is pressed and when the play button is pressed (or the
-    * OpMode is stopped).
-    */
+        // Initialize the IMU
+        imu.initialize(parameters);
 
+        // Wait for the start button to be pressed
+        waitForStart();
 
-
-   @Override
-   public void init_loop() {
-   }
- 
-   /**
-    * This method will be called once, when the play button is pressed.
-    */
-
-
-   @Override
-   public void start() {
-     runtime.reset();
-   }
-
-
-
-   /**
-    * This method will be called repeatedly during the period between when
-    * the play button is pressed and when the OpMode is stopped.
-    */
-   @Override
-   public void loop() {
-     telemetry.addData("Status", "Run Time: " + runtime.toString());
-   }
- 
-   /**
-    * This method will be called once, when this OpMode is stopped.
-    * <p>
-    * Your ability to control hardware from this method will be limited.
-    */
-   @Override
-   public void stop() {
- 
-   }
- }
- 
+        while (opModeIsActive()) {
+            // Get the acceleration data from the IMU
+            Acceleration acceleration = imu.getAcceleration();
+            
+            // Display acceleration data on telemetry
+            telemetry.addData("X", acceleration.xAccel);
+            telemetry.addData("Y", acceleration.yAccel);
+            telemetry.addData("Z", acceleration.zAccel);
+            telemetry.update();
+        }
+    }
+}
