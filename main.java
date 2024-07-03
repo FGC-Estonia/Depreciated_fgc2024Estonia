@@ -17,14 +17,10 @@ public class Main extends LinearOpMode {
     private IMU imu;
 
     private double lastTime=0; // create last varriables for traction control
-    private double lastPowerLeftFrontDrive=0;
-    private double lastPowerLeftBackDrive=0;
-    private double lastPowerRightBackDrive=0;
-    private double lastPowerRightLeftDrive=0;
     private double lastSpeedLeftFrontDrive=0;
     private double lastSpeedLeftBackDrive=0;
     private double lastSpeedRightBackDrive=0;
-    private double lastSpeedRightLeftDrive=0;
+    private double lastSpeedRightFrontDrive=0;
     private final double accelerationLimit=200; //RPSS revolutions per second  second 
 
     private DcMotor leftFrontDrive   = null;  //  Used to control the left front drive wheel
@@ -90,10 +86,8 @@ public class Main extends LinearOpMode {
             double drive = -gamepad1.left_stick_y;
             double strafe = gamepad1.left_stick_x;
             double turn = gamepad1.right_stick_x;
-
-
-
-            moveRobot(drive, strafe, turn);
+            
+            //moveRobot(drive, strafe, turn);
         }
     }
     public void moveRobot(double drive, double strafe, double turn) {
@@ -116,18 +110,34 @@ public class Main extends LinearOpMode {
         rightFrontDriveEx.setVelocity(rightFrontPowerRaw/max*maxradian);
         rightBackDriveEx.setVelocity(rightBackPowerRaw/max*maxradian);
     }
-    private void tractionControl(double powLeftFrontDrive, double powLeftBackDrive, double powRightBackDrive, double powRightLeftDrive, double currentTime){
+    private void tractionControl(double speedLeftFrontDrive, double speedLeftBackDrive, double speedRightBackDrive, double speedRightFrontDrive){
+        double deltaTime=System.currentTimeMillis();
+        double deltaSpeedLeftFrontDrive=speedLeftFrontDrive;
+        double deltaSpeedLeftBackDrive=speedLeftBackDrive;
+        double deltaSpeedRightFrontDrive=speedRightFrontDrive;
+        double deltaSpeedRightBackDrive=speedRightBackDrive;
+        double maxDelta=deltaTime*accelerationLimit;
+        double maxMultiplier=1;
 
+        if (deltaSpeedLeftBackDrive/maxDelta>maxMultiplier){
+            maxMultiplier=deltaSpeedLeftBackDrive/maxDelta;
+        } if (deltaSpeedLeftFrontDrive/maxDelta>maxMultiplier){
+            maxMultiplier=deltaSpeedLeftFrontDrive/maxDelta;
+        } if (deltaSpeedRightBackDrive/maxDelta>maxMultiplier){
+            maxMultiplier=deltaSpeedRightBackDrive/maxDelta;
+        } if (deltaSpeedRightFrontDrive/maxDelta>maxMultiplier){
+            maxMultiplier=deltaSpeedRightFrontDrive/maxDelta;
+        }
+
+        leftBackDriveEx.setVelocity(speedLeftBackDrive-deltaSpeedLeftBackDrive+deltaSpeedLeftBackDrive/maxMultiplier);
+        leftFrontDriveEx.setVelocity(speedLeftFrontDrive-deltaSpeedLeftFrontDrive+deltaSpeedLeftFrontDrive/maxMultiplier);
+        rightBackDriveEx.setVelocity(speedRightBackDrive-deltaSpeedRightBackDrive+deltaSpeedRightBackDrive/maxMultiplier);
+        rightFrontDriveEx.setVelocity(speedRightFrontDrive-deltaSpeedRightFrontDrive+deltaSpeedRightFrontDrive/maxMultiplier);
 
         lastTime=System.currentTimeMillis();
-
-        //lastPowerLeftFrontDrive=LeftFrontDriveEx.getVelocity();
-        //lastPowerLeftBackDrive=LeftBackDriveEx.getPo;
-        lastPowerRightBackDrive=powRightBackDrive;
-        lastPowerRightLeftDrive=powRightLeftDrive;
-        lastSpeedLeftFrontDrive=0;
-        lastSpeedLeftBackDrive=0;
-        lastSpeedRightBackDrive=0;
-        lastSpeedRightLeftDrive=0;
+        lastSpeedLeftFrontDrive=speedLeftFrontDrive;
+        lastSpeedLeftBackDrive=speedLeftBackDrive;
+        lastSpeedRightBackDrive=speedRightBackDrive;
+        lastSpeedRightFrontDrive=speedRightFrontDrive;
     }
 }
