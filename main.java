@@ -9,6 +9,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 public class Main extends LinearOpMode {
     private BNO055IMU imu;
 
+    private DcMotor leftFrontDrive   = null;  //  Used to control the left front drive wheel
+    private DcMotor rightFrontDrive  = null;  //  Used to control the right front drive wheel
+    private DcMotor leftBackDrive    = null;  //  Used to control the left back drive wheel
+    private DcMotor rightBackDrive   = null;  //  Used to control the right back drive wheel
+
     @Override
     public void runOpMode() {
         
@@ -47,15 +52,38 @@ public class Main extends LinearOpMode {
             telemetry.addData("Z", acceleration.zAccel);
             telemetry.update();
 
-            drive = -gamepad1.left_stick_y
-            strafe = gamepad1.left_stick_x
-            turn = gamepad1.right_stick_x
+            drive = -gamepad1.left_stick_y;
+            strafe = gamepad1.left_stick_x;
+            turn = gamepad1.right_stick_x;
 
-            moveRobot(drive, strafe, turn)
+            moveRobot(drive, strafe, turn);
         }
 
     public void moveRobot(double drive, double strafe, double turn) {
+        // Calculates raw power to motors
+        double leftFrontPowerRaw = -drive + strafe - turn;
+        double leftBackPowerRaw = drive + strafe - turn;
+        double rightFrontPowerRaw = drive + strafe + turn;
+        double rightBackPowerRaw = -drive + strafe + turn;
 
+        // Calculate the maximum absolute power value for normalization
+        double maxRawPower = Math.max(Math.max(Math.abs(leftFrontPowerRaw), Math.abs(leftBackPowerRaw)),
+        Math.max(Math.abs(rightFrontPowerRaw), Math.abs(rightBackPowerRaw)));
+
+        double max = Math.max(maxRawPower, 1.0);
+
+        // Calculate wheel powers.
+        double leftFrontPower    =  (-drive + strafe -turn)/max/1.2039;
+        double leftBackPower     =  (drive + strafe -turn)/max/1.2039;
+        double rightFrontPower   =  (drive + strafe +turn)/max;
+        double rightBackPower    =  (-drive + strafe +turn)/max;
+
+        
+        // Send powers to the wheels.
+        leftFrontDrive.setPower(leftFrontPower);
+        leftBackDrive.setPower(leftBackPower);
+        rightFrontDrive.setPower(rightFrontPower);
+        rightBackDrive.setPower(rightBackPower);
     }
     }
 }
