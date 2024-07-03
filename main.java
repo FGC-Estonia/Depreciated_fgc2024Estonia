@@ -24,10 +24,10 @@ public class Main extends LinearOpMode {
         leftBackDrive  = hardwareMap.get(DcMotor.class, "Motor_Port_1_CH");
         rightBackDrive = hardwareMap.get(DcMotor.class, "Motor_Port_3_CH");
 
-        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
-        leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+        leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
+        leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
+        rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
 
         double drive = 0;
         double strafe = 0;
@@ -67,10 +67,10 @@ public class Main extends LinearOpMode {
     }
     public void moveRobot(double drive, double strafe, double turn) {
         // Calculates raw power to motors
-        double leftFrontPowerRaw = -drive + strafe - turn;
-        double leftBackPowerRaw = drive + strafe - turn;
-        double rightFrontPowerRaw = drive + strafe + turn;
-        double rightBackPowerRaw = -drive + strafe + turn;
+        double leftFrontPowerRaw = drive - strafe + turn;
+        double leftBackPowerRaw = drive + strafe + turn;
+        double rightFrontPowerRaw = drive + strafe - turn;
+        double rightBackPowerRaw = drive - strafe - turn;
 
         // Calculate the maximum absolute power value for normalization
         double maxRawPower = Math.max(Math.max(Math.abs(leftFrontPowerRaw), Math.abs(leftBackPowerRaw)),
