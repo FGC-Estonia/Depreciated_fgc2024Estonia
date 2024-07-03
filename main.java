@@ -1,4 +1,5 @@
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 
 @TeleOp(name = "Main")
 public class Main extends LinearOpMode {
-    private BNO055IMU imu;
+    private IMU imu;
 
     private double lastTime=0; // create last varriables for traction control
     private double lastPowerLeftFrontDrive=0;
@@ -38,10 +39,6 @@ public class Main extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-
-
-        
-        
         
         leftFrontDrive  = hardwareMap.get(DcMotor.class, "Motor_Port_0_CH");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "Motor_Port_2_CH");
@@ -66,29 +63,27 @@ public class Main extends LinearOpMode {
         }
 
 
-        // Initialize the hardware variables
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        
+        imu = hardwareMap.get(IMU.class, "imu");
 
-        // Set up the parameters for the IMU
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.loggingEnabled = false;
+        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
+        RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
 
-        // Initialize the IMU
-        imu.initialize(parameters);
+        RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
+
+        // Now initialize the IMU with this mounting orientation
+        // Note: if you choose two conflicting directions, this initialization will cause a code exception.
+        imu.initialize(new IMU.Parameters(orientationOnRobot));
 
         // Wait for the start button to be pressed
+        imu.resetYaw();
         waitForStart();
 
         while (opModeIsActive()) {
             // Get the acceleration data from the IMU
-            Acceleration acceleration = imu.getAcceleration();
-            
+
             // Display acceleration data on telemetry
-            telemetry.addData("X", acceleration.xAccel);
-            telemetry.addData("Y", acceleration.yAccel);
-            telemetry.addData("Z", acceleration.zAccel);
+            telemetry.addData("gyro", imu.getRobotYawPitchRollAngles());
             telemetry.addData("leftFronDrive", ((leftFrontDriveEx.getVelocity())));
             telemetry.update();
 
@@ -125,8 +120,8 @@ public class Main extends LinearOpMode {
 
         lastTime=System.currentTimeMillis();
 
-        lastPowerLeftFrontDrive=LeftFrontDriveEx.getVelocity();
-        lastPowerLeftBackDrive=LeftBackDriveEx.getPo;
+        //lastPowerLeftFrontDrive=LeftFrontDriveEx.getVelocity();
+        //lastPowerLeftBackDrive=LeftBackDriveEx.getPo;
         lastPowerRightBackDrive=powRightBackDrive;
         lastPowerRightLeftDrive=powRightLeftDrive;
         lastSpeedLeftFrontDrive=0;
