@@ -201,13 +201,13 @@ public class Main extends LinearOpMode{
     /**
      * set desired power to motors
      * this method(function) will remove excess power to prevent slip
-     */
+     
     public void tractionControl(){
             Acceleration acceleration = accelerationSensor.getAcceleration();
             telemetry.addData("X acceleration: ", acceleration.xAccel);
             telemetry.addData("Y acceleration: ", acceleration.yAccel);
             telemetry.addData("Z acceleration: ", acceleration.zAccel);
-    }
+    }*/
 
 
     /**
