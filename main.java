@@ -11,6 +11,17 @@ public class Main extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        
+        leftFrontDrive  = hardwareMap.get(DcMotor.class, "Motor_Port_0_CH");
+        rightFrontDrive = hardwareMap.get(DcMotor.class, "Motor_Port_2_CH");
+        leftBackDrive  = hardwareMap.get(DcMotor.class, "Motor_Port_1_CH");
+        rightBackDrive = hardwareMap.get(DcMotor.class, "Motor_Port_3_CH");
+
+        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+        leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
+        rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+
         // Initialize the hardware variables
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 
@@ -35,6 +46,16 @@ public class Main extends LinearOpMode {
             telemetry.addData("Y", acceleration.yAccel);
             telemetry.addData("Z", acceleration.zAccel);
             telemetry.update();
+
+            drive = -gamepad1.left_stick_y
+            strafe = gamepad1.left_stick_x
+            turn = gamepad1.right_stick_x
+
+            moveRobot(drive, strafe, turn)
         }
+
+    public void moveRobot(double drive, double strafe, double turn) {
+
+    }
     }
 }
