@@ -8,6 +8,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 @TeleOp(name = "Main")
 public class Main extends LinearOpMode {
     private BNO055IMU imu;
+    private final double accelerationLimit=200; //RPSS revolutions per secon  second 
 
     private DcMotor leftFrontDrive   = null;  //  Used to control the left front drive wheel
     private DcMotor rightFrontDrive  = null;  //  Used to control the right front drive wheel
@@ -84,6 +85,9 @@ public class Main extends LinearOpMode {
         leftBackDrive.setPower(leftBackPower);
         rightFrontDrive.setPower(rightFrontPower);
         rightBackDrive.setPower(rightBackPower);
+    }
+    public void tractionControl(double pow1, double pow2, double pow3, double pow4){
+        double a=accelerationLimit+1;
     }
     }
 }
