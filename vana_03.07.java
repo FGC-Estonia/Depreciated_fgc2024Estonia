@@ -26,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 
 @TeleOp(name="MAIN Omni Drive AprilTag")
+@Disabled
 public class Main extends LinearOpMode{
     //Kõik staatilised väärtused ja nende tüübid nt int, float, imu
     
@@ -50,7 +51,7 @@ public class Main extends LinearOpMode{
     private Servo gimbalPitch = null;
     private Servo gimbalYaw = null;
 
-    private static final boolean USE_WEBCAM = true;  // Set true to use a webcam, or false for a phone camera
+    private static final boolean USE_WEBCAM = false;  // Set true to use a webcam, or false for a phone camera
     private static final int DESIRED_TAG_ID = -1;     // Choose the tag you want to approach or set to -1 for ANY tag.
     private VisionPortal visionPortal;               // Used to manage the video source.
     private AprilTagProcessor aprilTag;              // Used for managing the AprilTag detection process.
