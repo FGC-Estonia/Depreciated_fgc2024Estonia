@@ -191,7 +191,7 @@ public class Main extends LinearOpMode{
                 gimbalYaw.setPosition(currentYaw);
             }
 
-            tractionControl();
+            //tractionControl();
             // Apply desired axes motions to the drivetrain.
 
             moveRobot(drive, strafe, turn);
