@@ -1,5 +1,6 @@
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -86,8 +87,16 @@ public class Main extends LinearOpMode {
             double drive = -gamepad1.left_stick_y;
             double strafe = gamepad1.left_stick_x;
             double turn = gamepad1.right_stick_x;
-            
-            //moveRobot(drive, strafe, turn);
+
+            if (!gamepad1.left_bumper) {
+                double heading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+                double x = drive * Math.cos(heading) - strafe * Math.sin(heading);
+                double y = drive * Math.sin(heading) + strafe * Math.cos(heading);
+
+                moveRobot(x, y, turn);
+            }else {
+                moveRobot(drive, strafe, turn);
+            }
         }
     }
     public void moveRobot(double drive, double strafe, double turn) {
