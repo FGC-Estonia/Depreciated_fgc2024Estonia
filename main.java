@@ -103,10 +103,17 @@ public class Main extends LinearOpMode {
     }
     public void moveRobot(double drive, double strafe, double turn) {
         // Calculates raw power to motors
+<<<<<<< Updated upstream
         double leftFrontPowerRaw = -drive + strafe - turn;
         double leftBackPowerRaw = drive + strafe - turn;
         double rightFrontPowerRaw = drive + strafe + turn;
         double rightBackPowerRaw = -drive + strafe + turn;
+=======
+        double leftFrontPowerRaw = drive + strafe + turn;
+        double leftBackPowerRaw = drive - strafe + turn;
+        double rightFrontPowerRaw = drive - strafe - turn;
+        double rightBackPowerRaw = drive + strafe - turn;
+>>>>>>> Stashed changes
 
         // Calculate the maximum absolute power value for normalization
         double maxRawPower = Math.max(Math.max(Math.abs(leftFrontPowerRaw), Math.abs(leftBackPowerRaw)),
