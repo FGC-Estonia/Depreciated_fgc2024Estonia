@@ -31,6 +31,11 @@ public class Main extends LinearOpMode {
     private DcMotor leftBackDrive    = null;  //  Used to control the left back drive wheel
     private DcMotor rightBackDrive   = null;  //  Used to control the right back drive wheel
 
+    private DcMotorEx leftFrontDriveEx   = null;  //  Used to control the left front drive wheel
+    private DcMotorEx rightFrontDriveEx  = null;  //  Used to control the right front drive wheel
+    private DcMotorEx leftBackDriveEx    = null;  //  Used to control the left back drive wheel
+    private DcMotorEx rightBackDriveEx   = null;  //  Used to control the right back drive wheel
+
     @Override
     public void runOpMode() {
 
@@ -49,19 +54,15 @@ public class Main extends LinearOpMode {
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
 
         if (true){
-            if (leftFrontDrive instanceof DcMotorEx && leftBackDrive instanceof DcMotorEx  &&
-             rightBackDrive instanceof DcMotorEx && rightBackDrive instanceof DcMotorEx) {
-                // Perform the cast
-                DcMotorEx leftFrontDriveEx = (DcMotorEx)leftFrontDrive;
-                DcMotorEx rightFrontDriveEx = (DcMotorEx)rightFrontDrive;
-                DcMotorEx leftBackDriveEx = (DcMotorEx)leftBackDrive;
-                DcMotorEx rightBackDriveEx = (DcMotorEx)rightBackDrive;
-            
-                // Now you can use the enhanced functionality of DcMotorEx
-                int tractionControlStatus=0;
-            } else {
-                int tractionControlStatus=1;
-            }
+            leftFrontDriveEx  = hardwareMap.get(DcMotorEx.class, "Motor_Port_0_CH");
+            rightFrontDriveEx = hardwareMap.get(DcMotorEx.class, "Motor_Port_2_CH");
+            leftBackDriveEx  = hardwareMap.get(DcMotorEx.class, "Motor_Port_1_CH");
+            rightBackDriveEx = hardwareMap.get(DcMotorEx.class, "Motor_Port_3_CH");
+    
+            leftFrontDriveEx.setDirection(DcMotorEx.Direction.FORWARD);
+            leftBackDriveEx.setDirection(DcMotorEx.Direction.FORWARD);
+            rightFrontDriveEx.setDirection(DcMotorEx.Direction.REVERSE);
+            rightBackDriveEx.setDirection(DcMotorEx.Direction.REVERSE);
         }
 
 
@@ -88,6 +89,7 @@ public class Main extends LinearOpMode {
             telemetry.addData("X", acceleration.xAccel);
             telemetry.addData("Y", acceleration.yAccel);
             telemetry.addData("Z", acceleration.zAccel);
+            telemetry.addData("leftFronDrive", ((leftFrontDriveEx.getVelocity())));
             telemetry.update();
 
             double drive = -gamepad1.left_stick_y;
@@ -122,8 +124,9 @@ public class Main extends LinearOpMode {
 
 
         lastTime=System.currentTimeMillis();
-        lastPowerLeftFrontDrive=powLeftFrontDrive;
-        lastPowerLeftBackDrive=powLeftBackDrive;
+
+        lastPowerLeftFrontDrive=LeftFrontDriveEx.getVelocity();
+        lastPowerLeftBackDrive=LeftBackDriveEx.getPo;
         lastPowerRightBackDrive=powRightBackDrive;
         lastPowerRightLeftDrive=powRightLeftDrive;
         lastSpeedLeftFrontDrive=0;
