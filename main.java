@@ -4,11 +4,19 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+
 
 @TeleOp(name = "Main")
 public class Main extends LinearOpMode {
     private BNO055IMU imu;
 
+    private double lastTime=ElapsedTime.seconds();
+    private double lastSpeed1=0;
+    private double lastSpeed1=1;
+    private double lastSpeed1=2;
+    private double lastSpeed1=3;
     private final double accelerationLimit=200; //RPSS revolutions per secon  second 
 
     private DcMotor leftFrontDrive   = null;  //  Used to control the left front drive wheel
@@ -28,10 +36,6 @@ public class Main extends LinearOpMode {
         leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
         rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
-
-        double drive = 0;
-        double strafe = 0;
-        double turn = 0;
 
         // Initialize the hardware variables
         imu = hardwareMap.get(BNO055IMU.class, "imu");
@@ -84,7 +88,8 @@ public class Main extends LinearOpMode {
         rightFrontDrive.setPower(rightFrontPowerRaw/max);
         rightBackDrive.setPower(rightBackPowerRaw/max);
     }
-    private void tractionControl(double pow1, double pow2, double pow3, double pow4){
+    private void tractionControl(double pow0, double pow1, double pow2, double pow3){
+        lastTime=ElapsedTime.seconds();
         double a=accelerationLimit+1;
     }
 }
