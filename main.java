@@ -73,19 +73,12 @@ public class Main extends LinearOpMode {
         Math.max(Math.abs(rightFrontPowerRaw), Math.abs(rightBackPowerRaw)));
 
         double max = Math.max(maxRawPower, 1.0);
-
-        // Calculate wheel powers.
-        double leftFrontPower    =  (-drive + strafe -turn)/max/1.2039;
-        double leftBackPower     =  (drive + strafe -turn)/max/1.2039;
-        double rightFrontPower   =  (drive + strafe +turn)/max;
-        double rightBackPower    =  (-drive + strafe +turn)/max;
-
         
         // Send powers to the wheels.
-        leftFrontDrive.setPower(leftFrontPower);
-        leftBackDrive.setPower(leftBackPower);
-        rightFrontDrive.setPower(rightFrontPower);
-        rightBackDrive.setPower(rightBackPower);
+        leftFrontDrive.setPower(leftFrontPowerRaw/max/1.2039);
+        leftBackDrive.setPower(leftBackPowerRaw/max/1.2039);
+        rightFrontDrive.setPower(rightFrontPowerRaw/max);
+        rightBackDrive.setPower(rightBackPowerRaw/max);
     }
     private void tractionControl(double pow1, double pow2, double pow3, double pow4){
         double a=accelerationLimit+1;
