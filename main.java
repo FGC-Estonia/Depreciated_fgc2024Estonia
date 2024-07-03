@@ -22,7 +22,7 @@ public class Main extends LinearOpMode {
     private double lastSpeedLeftBackDrive=0;
     private double lastSpeedRightBackDrive=0;
     private double lastSpeedRightFrontDrive=0;
-    private final double accelerationLimit=200; //RPSS revolutions per second  second 
+    private final double accelerationLimit=20; //RPSS revolutions per second  second 
 
     private DcMotor leftFrontDrive   = null;  //  Used to control the left front drive wheel
     private DcMotor rightFrontDrive  = null;  //  Used to control the right front drive wheel
@@ -130,13 +130,13 @@ public class Main extends LinearOpMode {
         double maxDelta=deltaTime*accelerationLimit;
         double maxMultiplier=1;
 
-        if (deltaSpeedLeftBackDrive/maxDelta>maxMultiplier){
+        if (Math.abs(deltaSpeedLeftBackDrive/maxDelta)>Math.abs(maxMultiplier)){
             maxMultiplier=deltaSpeedLeftBackDrive/maxDelta;
-        } if (deltaSpeedLeftFrontDrive/maxDelta>maxMultiplier){
+        } if (Math.abs(deltaSpeedLeftFrontDrive/maxDelta)>Math.abs(maxMultiplier)){
             maxMultiplier=deltaSpeedLeftFrontDrive/maxDelta;
-        } if (deltaSpeedRightBackDrive/maxDelta>maxMultiplier){
+        } if (Math.abs(deltaSpeedRightBackDrive/maxDelta)>Math.abs(maxMultiplier)){
             maxMultiplier=deltaSpeedRightBackDrive/maxDelta;
-        } if (deltaSpeedRightFrontDrive/maxDelta>maxMultiplier){
+        } if (Math.abs(deltaSpeedRightFrontDrive/maxDelta)>Math.abs(maxMultiplier)){
             maxMultiplier=deltaSpeedRightFrontDrive/maxDelta;
         }
 
