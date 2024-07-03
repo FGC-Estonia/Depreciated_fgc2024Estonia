@@ -93,7 +93,7 @@ public class Main extends LinearOpMode {
             double turn = gamepad1.right_stick_x;
 
             if (!gamepad1.left_bumper) {
-                double heading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) + Math.PI / 2;
+                double heading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
                 double x = drive * Math.cos(heading) - strafe * Math.sin(heading);
                 double y = drive * Math.sin(heading) + strafe * Math.cos(heading);
 
