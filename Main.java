@@ -2,6 +2,8 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -16,6 +18,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainCon
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+import com.qualcomm.robotcore.hardware.AccelerationSensor;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -54,7 +57,7 @@ public class Main extends LinearOpMode{
     private AprilTagDetection desiredTag = null;     // Used to hold the data for a detected AprilTag
 
     IMU imu;
-
+    AccelerationSensor accelerationSensor;
     @Override public void runOpMode(){
         //kõik muutujad ja inisisaliseerimine
 
@@ -188,11 +191,24 @@ public class Main extends LinearOpMode{
                 gimbalYaw.setPosition(currentYaw);
             }
 
+            tractionControl();
             // Apply desired axes motions to the drivetrain.
-            moveRobot(drive, -strafe, turn);
+
+            moveRobot(drive, strafe, turn);
             sleep(10);
         }
     }
+    /**
+     * set desired power to motors
+     * this method(function) will remove excess power to prevent slip
+     */
+    public void tractionControl(){
+            Acceleration acceleration = accelerationSensor.getAcceleration();
+            telemetry.addData("X acceleration: ", acceleration.xAccel);
+            telemetry.addData("Y acceleration: ", acceleration.yAccel);
+            telemetry.addData("Z acceleration: ", acceleration.zAccel);
+    }
+
 
     /**
      * Move robot according to desired axes motions
