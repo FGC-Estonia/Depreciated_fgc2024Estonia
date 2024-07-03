@@ -207,8 +207,10 @@ public class Main extends LinearOpMode{
         double max = Math.max(Math.abs(x) + Math.abs(y), 1);
         if (!gamepad1.left_bumper) {
             double heading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) + Math.PI / 2;
-            double x = x * Math.cos(heading) - y * Math.sin(heading);
-            double y = x * Math.sin(heading) + y * Math.cos(heading);
+            double tempx = x * Math.cos(heading) - y * Math.sin(heading);
+            double tempy = x * Math.sin(heading) + y * Math.cos(heading);
+            x = tempx;
+            y = tempy;
         }
 
         // Calculate wheel powers.
