@@ -7,7 +7,7 @@
 
  @TeleOp(name = "Main")
  
- public class Clean extends OpMode {
+ public class Main extends OpMode {
  
    private ElapsedTime runtime = new ElapsedTime();
    /**
