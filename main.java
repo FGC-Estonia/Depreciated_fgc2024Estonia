@@ -105,10 +105,12 @@ public class Main extends LinearOpMode {
         double maxradian = 1972.92;
         
         // Send powers to the wheels.
-        leftFrontDriveEx.setVelocity(leftFrontPowerRaw/max*maxradian/1.2039);
-        leftBackDriveEx.setVelocity(leftBackPowerRaw/max*maxradian/1.2039);
-        rightFrontDriveEx.setVelocity(rightFrontPowerRaw/max*maxradian);
-        rightBackDriveEx.setVelocity(rightBackPowerRaw/max*maxradian);
+        double leftFrontRawSpeed = (leftFrontPowerRaw/max*maxradian/1.2039);
+        double leftBackRawSpeed = (leftBackPowerRaw/max*maxradian/1.2039);
+        double rightFrontRawSpeed = (rightFrontPowerRaw/max*maxradian);
+        double rightBackRawSpeed = (rightBackPowerRaw/max*maxradian);
+        tractionControl(leftFrontRawSpeed, leftBackRawSpeed, rightFrontRawSpeed, rightBackRawSpeed);
+
     }
     private void tractionControl(double speedLeftFrontDrive, double speedLeftBackDrive, double speedRightBackDrive, double speedRightFrontDrive){
         double deltaTime=System.currentTimeMillis();
