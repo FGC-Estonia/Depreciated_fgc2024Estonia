@@ -150,5 +150,11 @@ public class Main extends LinearOpMode {
         lastSpeedLeftBackDrive=speedLeftBackDrive;
         lastSpeedRightBackDrive=speedRightBackDrive;
         lastSpeedRightFrontDrive=speedRightFrontDrive;
+
+        telemetry.addData("left back wanted speed",speedLeftBackDrive);
+        telemetry.addData("left back got speed",speedLeftBackDrive-deltaSpeedLeftBackDrive+deltaSpeedLeftBackDrive/maxMultiplier);
+        telemetry.addData("left front wanted speed",speedLeftFrontDrive);
+        telemetry.addData("left front got speed",speedLeftFrontDrive-deltaSpeedLeftFrontDrive+deltaSpeedLeftFrontDrive/maxMultiplier);
+
     }
 }
