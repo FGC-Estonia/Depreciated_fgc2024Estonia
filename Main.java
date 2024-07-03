@@ -230,8 +230,8 @@ public class Main extends LinearOpMode{
         }
 
         // Calculate wheel powers.
-        double leftFrontPower    =  (-x + y -yaw)/max;
-        double leftBackPower     =  (x + y -yaw)/max;
+        double leftFrontPower    =  (-x + y -yaw)/max/1.2039;
+        double leftBackPower     =  (x + y -yaw)/max/1.2039;
         double rightFrontPower   =  (x + y +yaw)/max;
         double rightBackPower    =  (-x + y +yaw)/max;
 
