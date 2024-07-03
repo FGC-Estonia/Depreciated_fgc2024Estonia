@@ -29,6 +29,10 @@ public class Main extends LinearOpMode {
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
 
+        double drive = 0;
+        double strafe = 0;
+        double turn = 0;
+
         // Initialize the hardware variables
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 
