@@ -96,13 +96,13 @@
                 double strafe = gamepad1.left_stick_x;
                 double turn = gamepad1.right_stick_x;
 
-                if (!gamepad1.left_bumper) {
+                if (!gamepad1.left_bumper) { // Field centric drive when in manual mode (autodrive button not pressed)
                     double heading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
                     double x = drive * Math.cos(heading) - strafe * Math.sin(heading);
                     double y = drive * Math.sin(heading) + strafe * Math.cos(heading);
 
                     moveRobot(x, y, turn);
-                }else {
+                }else { // Inputs for automatic mode driving
                     moveRobot(drive, strafe, turn);
                 }
             }
@@ -121,7 +121,7 @@
             double max = Math.max(maxRawPower, 1.0);
             double maxradian = 1972.92;
             
-            // Send powers to the wheels.
+            // Calculate wheel speeds normalized to the wheels.
             double leftFrontRawSpeed = (leftFrontPowerRaw/max*maxradian/1.2039);
             double leftBackRawSpeed = (leftBackPowerRaw/max*maxradian/1.2039);
             double rightFrontRawSpeed = (rightFrontPowerRaw/max*maxradian);
