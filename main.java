@@ -23,7 +23,7 @@
         private double lastSpeedRightBackDrive=0;
         private double lastSpeedRightFrontDrive=0;
         private final double accelerationLimit=20; //RPSS revolutions per second  second 
-        boolean TractionControlstatus = true;
+        boolean TractionControlstatus = false;
 
         private DcMotor leftFrontDrive   = null;  //  Used to control the left front drive wheel
         private DcMotor rightFrontDrive  = null;  //  Used to control the right front drive wheel
@@ -37,6 +37,9 @@
 
         @Override
         public void runOpMode() {
+
+            gamepad1.rumble(0.5, 0.5, 1000);
+            gamepad2.rumble(0.5, 0.5, 1000);
             
             leftFrontDrive  = hardwareMap.get(DcMotor.class, "Motor_Port_0_CH");
             rightFrontDrive = hardwareMap.get(DcMotor.class, "Motor_Port_2_CH");
