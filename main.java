@@ -28,7 +28,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import com.qualcomm.robotcore.hardware.Servo;
 import java.util.concurrent.TimeUnit;
 
-    import java.util.ArrayList;
+import java.util.List;
+import java.util.ArrayList;
 
 
 @TeleOp(name = "Main")
@@ -42,7 +43,10 @@ public class Main extends LinearOpMode {
     private static final int DESIRED_TAG_ID = -1;     // Choose the tag you want to approach or set to -1 for ANY tag.
     private VisionPortal visionPortal;               // Used to manage the video source.
     private AprilTagProcessor aprilTag;              // Used for managing the AprilTag detection process.
-    private AprilTagDetection desiredTag = null;  
+    private AprilTagDetection desiredTag = null; 
+
+    private List<Integer> aprilTagIds;
+    private int currentIndex = 0;
 
 
     private IMU imu;
@@ -69,6 +73,9 @@ public class Main extends LinearOpMode {
     public void runOpMode() {
         gamepad1.rumble(0.5, 0.5, 1000);
         gamepad2.rumble(0.5, 0.5, 1000);
+
+        // Initialize the list with predefined AprilTag IDs
+        aprilTagIds = Arrays.asList(583, 584, 585, 586);
         
         double currentPitch = 0.5;
         double currentYaw = 0.5;
@@ -124,6 +131,19 @@ public class Main extends LinearOpMode {
             waitForStart();
 
             while (opModeIsActive()) {
+
+                // Check controller inputs to navigate through the list
+            if (gamepad1.dpad_up) {
+                currentIndex = (currentIndex - 1 + aprilTagIds.size()) % aprilTagIds.size();
+                sleep(250); // Prevent rapid cycling
+            } else if (gamepad1.dpad_down) {
+                currentIndex = (currentIndex + 1) % aprilTagIds.size();
+                sleep(250); // Prevent rapid cycling
+            }
+
+            // Display the current AprilTag ID on telemetry
+            telemetry.addData("Current AprilTag ID", aprilTagIds.get(currentIndex));
+            telemetry.update();
 
                 if (gamepad1.a && TractionControlstatus) {
                     TractionControlstatus = false;
