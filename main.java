@@ -143,7 +143,6 @@ public class Main extends LinearOpMode {
 
             // Display the current AprilTag ID on telemetry
             telemetry.addData("Current AprilTag ID", aprilTagIds.get(currentIndex));
-            telemetry.update();
 
                 if (gamepad1.a && TractionControlstatus) {
                     TractionControlstatus = false;
@@ -195,12 +194,10 @@ public class Main extends LinearOpMode {
             gimbalPitch.setPosition(currentPitch);
             gimbalYaw.setPosition(currentYaw);
             
-            // Get the acceleration data from the IMU
+            // Get he acceleration data from the IMU
 
-                // Display acceleration data on telemetry
-                telemetry.addData("gyro", imu.getRobotYawPitchRollAngles());
-                telemetry.addData("leftFronDrive", ((leftFrontDriveEx.getVelocity())));
-                telemetry.update();
+            // Display acceleration data on telemetry
+            telemetry.addData("gyro", imu.getRobotYawPitchRollAngles());
 
                 double drive = -gamepad1.left_stick_y;
                 double strafe = gamepad1.left_stick_x;
@@ -215,6 +212,7 @@ public class Main extends LinearOpMode {
                 }else { // Inputs for automatic mode driving
                     moveRobot(drive, strafe, turn);
                 }
+            telemetry.update();
             }
         }
         public void moveRobot(double drive, double strafe, double turn) {
