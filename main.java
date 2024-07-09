@@ -29,8 +29,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import com.qualcomm.robotcore.hardware.Servo;
 import java.util.concurrent.TimeUnit;
 
-import java.util.List;
-    import java.util.ArrayList;
+import java.util.List;      
+import java.util.ArrayList;
 
 
 @TeleOp(name = "Main")
