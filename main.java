@@ -1,3 +1,4 @@
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import java.util.Arrays;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -29,13 +30,13 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import com.qualcomm.robotcore.hardware.Servo;
 import java.util.concurrent.TimeUnit;
 
-import java.util.List;      
+import java.util.List;
 import java.util.ArrayList;
-
 
 @TeleOp(name = "Main")
 public class Main extends LinearOpMode {
-    private static ElapsedTime timer= new ElapsedTime();
+
+    private static ElapsedTime timer = new ElapsedTime();
     //vision
     private Servo gimbalPitch = null;
     private Servo gimbalYaw = null;
@@ -44,7 +45,7 @@ public class Main extends LinearOpMode {
     private static final int DESIRED_TAG_ID = -1;     // Choose the tag you want to approach or set to -1 for ANY tag.
     private VisionPortal visionPortal;               // Used to manage the video source.
     private AprilTagProcessor aprilTag;              // Used for managing the AprilTag detection process.
-    private AprilTagDetection desiredTag = null;  
+    private AprilTagDetection desiredTag = null;
 
     private List<Integer> aprilTagIds;
     private int currentIndex = 0;
@@ -77,14 +78,14 @@ public class Main extends LinearOpMode {
 
         // Initialize the list with predefined AprilTag IDs
         aprilTagIds = Arrays.asList(583, 584, 585, 586);
-        
+
         double currentPitch = 0.5;
         double currentYaw = 0.5;
         double sameXAprilTag = 0;
-        double errorsCatchedAmmount=0;
+        double errorsCatchedAmmount = 0;
 
         initAprilTag();
-        
+
         gimbalPitch = hardwareMap.get(Servo.class, "Servo_Port_0_CH");
         gimbalPitch.setPosition(currentPitch);
         gimbalYaw = hardwareMap.get(Servo.class, "Servo_Port_1_CH");
@@ -94,157 +95,158 @@ public class Main extends LinearOpMode {
             setManualExposure(6, 250);
         }
 
-        leftFrontDrive  = hardwareMap.get(DcMotor.class, "Motor_Port_1_CH");
+        leftFrontDrive = hardwareMap.get(DcMotor.class, "Motor_Port_1_CH");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "Motor_Port_0_CH");
-        leftBackDrive  = hardwareMap.get(DcMotor.class, "Motor_Port_2_CH");
+        leftBackDrive = hardwareMap.get(DcMotor.class, "Motor_Port_2_CH");
         rightBackDrive = hardwareMap.get(DcMotor.class, "Motor_Port_3_CH");
 
-            leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-            leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
-            rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
-            rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
+        leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
+        leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
+        rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
 
         if (true) {
             leftFrontDriveEx = hardwareMap.get(DcMotorEx.class, "Motor_Port_1_CH");
-                rightFrontDriveEx = hardwareMap.get(DcMotorEx.class, "Motor_Port_0_CH");
+            rightFrontDriveEx = hardwareMap.get(DcMotorEx.class, "Motor_Port_0_CH");
             leftBackDriveEx = hardwareMap.get(DcMotorEx.class, "Motor_Port_2_CH");
-                rightBackDriveEx = hardwareMap.get(DcMotorEx.class, "Motor_Port_3_CH");
-        
-                leftFrontDriveEx.setDirection(DcMotorEx.Direction.FORWARD);
-                leftBackDriveEx.setDirection(DcMotorEx.Direction.FORWARD);
-                rightFrontDriveEx.setDirection(DcMotorEx.Direction.REVERSE);
-                rightBackDriveEx.setDirection(DcMotorEx.Direction.REVERSE);
+            rightBackDriveEx = hardwareMap.get(DcMotorEx.class, "Motor_Port_3_CH");
+
+            leftFrontDriveEx.setDirection(DcMotorEx.Direction.FORWARD);
+            leftBackDriveEx.setDirection(DcMotorEx.Direction.FORWARD);
+            rightFrontDriveEx.setDirection(DcMotorEx.Direction.REVERSE);
+            rightBackDriveEx.setDirection(DcMotorEx.Direction.REVERSE);
+        }
+
+        imu = hardwareMap.get(IMU.class, "imu");
+
+        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
+        RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.RIGHT;
+
+        RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
+
+        // Now initialize the IMU with this mounting orientation
+        // Note: if you choose two conflicting directions, this initialization will cause a code exception.
+        imu.initialize(new IMU.Parameters(orientationOnRobot));
+
+        // Wait for the start button to be pressed
+        imu.resetYaw();
+        waitForStart();
+
+        while (opModeIsActive()) {
+
+            if (gamepad1.a && TractionControlstatus) {
+                TractionControlstatus = false;
+                telemetry.addData("Tractioncontrol = ", TractionControlstatus);
+            } else if (gamepad1.a && !TractionControlstatus) {
+                TractionControlstatus = true;
+                telemetry.addData("Tractioncontrol = ", TractionControlstatus);
             }
 
-
-            
-            imu = hardwareMap.get(IMU.class, "imu");
-
-            RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
-            RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.RIGHT;
-
-            RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
-
-            // Now initialize the IMU with this mounting orientation
-            // Note: if you choose two conflicting directions, this initialization will cause a code exception.
-            imu.initialize(new IMU.Parameters(orientationOnRobot));
-
-            // Wait for the start button to be pressed
-            imu.resetYaw();
-            waitForStart();
-
-            while (opModeIsActive()) {
-
-                if (gamepad1.a && TractionControlstatus) {
-                    TractionControlstatus = false;
-                } else if (gamepad1.a && !TractionControlstatus) {
-                    TractionControlstatus = true;
-                }
-                
-                            for (AprilTagDetection detection : aprilTag.getDetections())  {
+            for (AprilTagDetection detection : aprilTag.getDetections()) {
                 try {
-                 Orientation rot = Orientation.getOrientation(detection.rawPose.R, AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
-            
-                 // Original source data
-                 double poseX = detection.rawPose.x;
-                 double poseY = detection.rawPose.y;
-                 double poseZ = detection.rawPose.z;
-                
-                 double poseAX = rot.firstAngle;
-                 double poseAY = rot.secondAngle;
-                 double poseAZ = rot.thirdAngle;
-                 telemetry.addData("xTag", poseX);
-                 telemetry.addData("zTag", poseZ);
-                 telemetry.addData("yTag", poseY);
-                 telemetry.addData("compensation", Math.pow(Math.toDegrees(Math.asin(poseX/poseZ)/270), 3));
-                 telemetry.addData("compensation", -Math.pow(Math.toDegrees(Math.asin(poseY/poseZ))/270, 3));
-                 telemetry.addData("same?", true&&sameXAprilTag!=poseX);
-                 telemetry.addData("cycle time",System.currentTimeMillis()-lastTime);
-                 lastTime=timer.time();
-                 telemetry.update();
-                 if (true&&sameXAprilTag!=poseX){
+                    Orientation rot = Orientation.getOrientation(detection.rawPose.R, AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
 
-                     double yawAngleOffset=Math.toDegrees(Math.asin(poseX/poseZ));
-                     currentYaw+=Math.pow(yawAngleOffset/270, 3);
-                     
-                     double pitchAngleOffset=Math.toDegrees(Math.asin(poseY/poseZ));
-                     currentPitch-=Math.pow(pitchAngleOffset/270, 3);
-                 }
-                sameXAprilTag=poseX;
-                }
-                catch (Exception e) {
-                    errorsCatchedAmmount+=1;
+                    // Original source data
+                    double poseX = detection.rawPose.x;
+                    double poseY = detection.rawPose.y;
+                    double poseZ = detection.rawPose.z;
+
+                    double poseAX = rot.firstAngle;
+                    double poseAY = rot.secondAngle;
+                    double poseAZ = rot.thirdAngle;
+                    telemetry.addData("xTag", poseX);
+                    telemetry.addData("zTag", poseZ);
+                    telemetry.addData("yTag", poseY);
+                    telemetry.addData("compensation", Math.pow(Math.toDegrees(Math.asin(poseX / poseZ) / 270), 3));
+                    telemetry.addData("compensation", -Math.pow(Math.toDegrees(Math.asin(poseY / poseZ)) / 270, 3));
+                    telemetry.addData("same?", true && sameXAprilTag != poseX);
+                    telemetry.addData("cycle time", System.currentTimeMillis() - lastTime);
+                    lastTime = timer.time();
+                    //telemetry.update();
+                    if (true && sameXAprilTag != poseX) {
+
+                        double yawAngleOffset = Math.toDegrees(Math.asin(poseX / poseZ));
+                        currentYaw += Math.pow(yawAngleOffset / 270, 3);
+
+                        double pitchAngleOffset = Math.toDegrees(Math.asin(poseY / poseZ));
+                        currentPitch -= Math.pow(pitchAngleOffset / 270, 3);
+                    }
+                    sameXAprilTag = poseX;
+                } catch (Exception e) {
+                    errorsCatchedAmmount += 1;
                 }
             }
-            
 
-            if (gamepad1.dpad_up) { 
-                //currentPitch += 0.001;
-            }
-            if (gamepad1.dpad_down) {
-                currentPitch -= 0.001;
+            // Check controller inputs to navigate through the list
+            if (gamepad1.dpad_up) {
+                currentIndex = (currentIndex - 1 + aprilTagIds.size()) % aprilTagIds.size();
+                sleep(250); // Prevent rapid cycling
+            } else if (gamepad1.dpad_down) {
+                currentIndex = (currentIndex + 1) % aprilTagIds.size();
+                sleep(250); // Prevent rapid cycling
             }
             if (gamepad1.dpad_left) {
-                currentYaw -= 0.001;
-            }
-            if (gamepad1.dpad_right) {
-                currentYaw += 0.001;
+                decimation = Math.max(1, decimation - 1);
+                aprilTag.setDecimation(decimation);
+                sleep(250); // Prevent rapid cycling
+            } else if (gamepad1.dpad_right) {
+                decimation = Math.min(5, decimation + 1);
+                aprilTag.setDecimation(decimation);
+                sleep(250); // Prevent rapid cycling
             }
             gimbalPitch.setPosition(currentPitch);
             gimbalYaw.setPosition(currentYaw);
-            
-            // Get the acceleration data from the IMU
 
+            // Get the acceleration data from the IMU
             // Display acceleration data on telemetry
             telemetry.addData("gyro", imu.getRobotYawPitchRollAngles());
 
-                double drive = -gamepad1.left_stick_y;
-                double strafe = gamepad1.left_stick_x;
-                double turn = gamepad1.right_stick_x;
+            double drive = -gamepad1.left_stick_y;
+            double strafe = gamepad1.left_stick_x;
+            double turn = gamepad1.right_stick_x;
 
-                if (!gamepad1.left_bumper) { // Field centric drive when in manual mode (autodrive button not pressed)
-                    double heading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
-                    double x = drive * Math.cos(heading) - strafe * Math.sin(heading);
-                    double y = drive * Math.sin(heading) + strafe * Math.cos(heading);
+            if (!gamepad1.left_bumper) { // Field centric drive when in manual mode (autodrive button not pressed)
+                double heading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+                double x = drive * Math.cos(heading) - strafe * Math.sin(heading);
+                double y = drive * Math.sin(heading) + strafe * Math.cos(heading);
 
-                    moveRobot(x, y, turn);
-                } else { // Inputs for automatic mode driving
-                    moveRobot(drive, strafe, turn);
-                }
+                moveRobot(x, y, turn);
+            } else { // Inputs for automatic mode driving
+                moveRobot(drive, strafe, turn);
             }
             telemetry.update();
         }
-    
+    }
 
-        public void moveRobot(double drive, double strafe, double turn) {
-            // Calculates raw power to motors
-            double leftFrontPowerRaw = drive + strafe + turn;
-            double leftBackPowerRaw = drive - strafe + turn;
-            double rightFrontPowerRaw = drive + strafe - turn;
-            double rightBackPowerRaw = drive - strafe - turn;
+    public void moveRobot(double drive, double strafe, double turn) {
+        // Calculates raw power to motors
+        double leftFrontPowerRaw = drive + strafe + turn;
+        double leftBackPowerRaw = drive - strafe + turn;
+        double rightFrontPowerRaw = drive + strafe - turn;
+        double rightBackPowerRaw = drive - strafe - turn;
 
-            // Calculate the maximum absolute power value for normalization
-            double maxRawPower = Math.max(Math.max(Math.abs(leftFrontPowerRaw), Math.abs(leftBackPowerRaw)),
-            Math.max(Math.abs(rightFrontPowerRaw), Math.abs(rightBackPowerRaw)));
+        // Calculate the maximum absolute power value for normalization
+        double maxRawPower = Math.max(Math.max(Math.abs(leftFrontPowerRaw), Math.abs(leftBackPowerRaw)),
+                Math.max(Math.abs(rightFrontPowerRaw), Math.abs(rightBackPowerRaw)));
 
-            double max = Math.max(maxRawPower, 1.0);
-            double maxradian = 1972.92;
-            
-            // Calculate wheel speeds normalized to the wheels.
+        double max = Math.max(maxRawPower, 1.0);
+        double maxradian = 1972.92;
+
+        // Calculate wheel speeds normalized to the wheels.
         double leftFrontRawSpeed = (leftFrontPowerRaw / max * maxradian / 1.2039);
         double leftBackRawSpeed = (leftBackPowerRaw / max * maxradian);
         double rightFrontRawSpeed = (rightFrontPowerRaw / max * maxradian / 1.2039);
         double rightBackRawSpeed = (rightBackPowerRaw / max * maxradian);
-            if (TractionControlstatus) {
-                tractionControl(leftFrontRawSpeed, leftBackRawSpeed, rightFrontRawSpeed, rightBackRawSpeed);
-            } else {
-                leftBackDriveEx.setVelocity(leftBackRawSpeed);
-                leftFrontDriveEx.setVelocity(leftFrontRawSpeed);
-                rightBackDriveEx.setVelocity(rightBackRawSpeed);
-                rightFrontDriveEx.setVelocity(rightFrontRawSpeed);
-            }
-
+        if (TractionControlstatus) {
+            tractionControl(leftFrontRawSpeed, leftBackRawSpeed, rightFrontRawSpeed, rightBackRawSpeed);
+        } else {
+            leftBackDriveEx.setVelocity(leftBackRawSpeed);
+            leftFrontDriveEx.setVelocity(leftFrontRawSpeed);
+            rightBackDriveEx.setVelocity(rightBackRawSpeed);
+            rightFrontDriveEx.setVelocity(rightFrontRawSpeed);
         }
+
+    }
 
     private void tractionControl(double speedLeftFrontDrive, double speedLeftBackDrive, double speedRightBackDrive, double speedRightFrontDrive) {
         double deltaTime = System.currentTimeMillis();
@@ -266,7 +268,7 @@ public class Main extends LinearOpMode {
         }
         if (Math.abs(deltaSpeedRightFrontDrive / maxDelta) > Math.abs(maxMultiplier)) {
             maxMultiplier = deltaSpeedRightFrontDrive / maxDelta;
-            }
+        }
 
         leftBackDriveEx.setVelocity(speedLeftBackDrive - deltaSpeedLeftBackDrive + deltaSpeedLeftBackDrive / maxMultiplier);
         leftFrontDriveEx.setVelocity(speedLeftFrontDrive - deltaSpeedLeftFrontDrive + deltaSpeedLeftFrontDrive / maxMultiplier);
@@ -311,11 +313,11 @@ public class Main extends LinearOpMode {
                     .build();
         }
     }
-    
+
     /*
      Manually set the camera gain and exposure.
      This can only be called AFTER calling initAprilTag(), and only works for Webcams;
-    */
+     */
     private void setManualExposure(int exposureMS, int gain) {
         // Wait for the camera to be open, then use the controls
 
@@ -347,5 +349,5 @@ public class Main extends LinearOpMode {
             gainControl.setGain(gain);
             sleep(20);
         }
-        }
     }
+}
