@@ -94,9 +94,9 @@ public class Main extends LinearOpMode {
             setManualExposure(6, 250);
         }
 
-        leftFrontDrive  = hardwareMap.get(DcMotor.class, "Motor_Port_0_CH");
-        rightFrontDrive = hardwareMap.get(DcMotor.class, "Motor_Port_2_CH");
-        leftBackDrive  = hardwareMap.get(DcMotor.class, "Motor_Port_1_CH");
+        leftFrontDrive  = hardwareMap.get(DcMotor.class, "Motor_Port_1_CH");
+        rightFrontDrive = hardwareMap.get(DcMotor.class, "Motor_Port_0_CH");
+        leftBackDrive  = hardwareMap.get(DcMotor.class, "Motor_Port_2_CH");
         rightBackDrive = hardwareMap.get(DcMotor.class, "Motor_Port_3_CH");
 
             leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -105,9 +105,9 @@ public class Main extends LinearOpMode {
             rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
 
         if (true) {
-            leftFrontDriveEx = hardwareMap.get(DcMotorEx.class, "Motor_Port_0_CH");
-                rightFrontDriveEx = hardwareMap.get(DcMotorEx.class, "Motor_Port_2_CH");
-            leftBackDriveEx = hardwareMap.get(DcMotorEx.class, "Motor_Port_1_CH");
+            leftFrontDriveEx = hardwareMap.get(DcMotorEx.class, "Motor_Port_1_CH");
+                rightFrontDriveEx = hardwareMap.get(DcMotorEx.class, "Motor_Port_0_CH");
+            leftBackDriveEx = hardwareMap.get(DcMotorEx.class, "Motor_Port_2_CH");
                 rightBackDriveEx = hardwareMap.get(DcMotorEx.class, "Motor_Port_3_CH");
         
                 leftFrontDriveEx.setDirection(DcMotorEx.Direction.FORWARD);
@@ -121,7 +121,7 @@ public class Main extends LinearOpMode {
             imu = hardwareMap.get(IMU.class, "imu");
 
             RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
-            RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+            RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.RIGHT;
 
             RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
 
@@ -232,8 +232,8 @@ public class Main extends LinearOpMode {
             
             // Calculate wheel speeds normalized to the wheels.
         double leftFrontRawSpeed = (leftFrontPowerRaw / max * maxradian / 1.2039);
-        double leftBackRawSpeed = (leftBackPowerRaw / max * maxradian / 1.2039);
-        double rightFrontRawSpeed = (rightFrontPowerRaw / max * maxradian);
+        double leftBackRawSpeed = (leftBackPowerRaw / max * maxradian);
+        double rightFrontRawSpeed = (rightFrontPowerRaw / max * maxradian / 1.2039);
         double rightBackRawSpeed = (rightBackPowerRaw / max * maxradian);
             if (TractionControlstatus) {
                 tractionControl(leftFrontRawSpeed, leftBackRawSpeed, rightFrontRawSpeed, rightBackRawSpeed);
