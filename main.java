@@ -195,8 +195,8 @@ public class Main extends LinearOpMode {
             
             // Get the acceleration data from the IMU
 
-                // Display acceleration data on telemetry
-                telemetry.addData("gyro", imu.getRobotYawPitchRollAngles());
+            // Display acceleration data on telemetry
+            telemetry.addData("gyro", imu.getRobotYawPitchRollAngles());
 
                 double drive = -gamepad1.left_stick_y;
                 double strafe = gamepad1.left_stick_x;
@@ -208,7 +208,7 @@ public class Main extends LinearOpMode {
                     double y = drive * Math.sin(heading) + strafe * Math.cos(heading);
 
                     moveRobot(x, y, turn);
-            } else { // Inputs for automatic mode driving
+                } else { // Inputs for automatic mode driving
                     moveRobot(drive, strafe, turn);
                 }
             }
