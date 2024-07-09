@@ -10,7 +10,7 @@ public class Main extends LinearOpMode {
     public void runOpMode() {
         
         runMotor = new RunMotor();
-        runMotor.RunMotor(hardwareMap);
+        runMotor.initRunMotor(hardwareMap);
         
         waitForStart();
         
