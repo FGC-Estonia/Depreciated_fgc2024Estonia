@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode; 
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode; //type of rev code. opmode is also possible
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+@TeleOp(name="main")
 public class Main extends LinearOpMode { //file name is Main.java    extends the prebuilt LinearOpMode by rev to run
     /*
     * Import external classes 
@@ -9,7 +11,7 @@ public class Main extends LinearOpMode { //file name is Main.java    extends the
     *eg:
     * RunMotor runMotor;
     */
-    
+    MoveRobot moveRobot;
     @Override
     public void runOpMode() {
         /*
@@ -22,10 +24,13 @@ public class Main extends LinearOpMode { //file name is Main.java    extends the
          * eg:
          * runMotor.initRunMotor(hardwareMap);
          */
+         moveRobot =new MoveRobot();
+         moveRobot.initMoveRobot(hardwareMap);
 
         waitForStart();
         
         while (opModeIsActive()) {
+            moveRobot.setSpeed();
             //runMotor.SetSpeed();
 
         }
