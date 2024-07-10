@@ -1,12 +1,26 @@
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+import org.firstinspires.ftc.vision.VisionPortal;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
+import java.util.List;
+
 
 public class AprilTagTracker{
-        private void initAprilTag() {
+    private AprilTagProcessor aprilTag;
+    private VisionPortal visionPortal;
+    private HardwareMap hardwareMap;
+    private Telemetry telemetry;
 
+    private static final boolean USE_WEBCAM = true;
+        private void initAprilTag(HardwareMap hardwareMapPorted, Telemetry telemetryPorted) {
+
+        hardwareMap = hardwareMapPorted;
+        telemetry = telemetryPorted;
         // Create the AprilTag processor.
         aprilTag = new AprilTagProcessor.Builder()
 

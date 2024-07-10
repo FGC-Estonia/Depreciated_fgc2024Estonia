@@ -12,17 +12,19 @@ public class MoveRobot{
     private DcMotorEx rightFrontDriveEx = null;  //  Used to control the right front drive wheel
     private DcMotorEx leftBackDriveEx = null;  //  Used to control the left back drive wheel
     private DcMotorEx rightBackDriveEx = null;  //  Used to control the right back drive wheel
-    HardwareMap hwMap = null;
-
+    
+    private HardwareMap hwMap = null;
     private IMU imu;
     private HardwareMap hardwareMap;
     private Telemetry telemetry;
-
+    private AprilTagTracker aprilTagTracker;
 
     public void initMoveRobot(HardwareMap hardwareMapPorted, Telemetry telemetryPorted){
         
         hardwareMap = hardwareMapPorted;
         telemetry = telemetryPorted;
+        aprilTagTracker = new AprilTagTracker(hardwareMap, telemetry);
+        aprilTagTracker.initAprilTag(hardwareMap, telemetry);
 
 
         // Initializing imu
