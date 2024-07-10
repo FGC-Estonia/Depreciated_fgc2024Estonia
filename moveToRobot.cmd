@@ -9,6 +9,8 @@ for %%f in (*.java) do (
     .\platform-tools\adb push "%%f" /sdcard/FIRST/java/src/org/firstinspires/ftc/teamcode/
 )
 
+
+
 if 1==0 (
     rem compile all java files 
     java -version > nul 2>&1

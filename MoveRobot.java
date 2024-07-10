@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -14,36 +15,45 @@ public class MoveRobot{
     HardwareMap hwMap = null;
 
     private IMU imu;
+    private HardwareMap hardwareMap;
+    private Telemetry telemetry;
 
-    public void initMoveRobot(HardwareMap hwMap){
-        this.hwMap = hwMap;
 
-            // Initializing imu
-            imu = hwMap.get(IMU.class, "imu");
-            
-            RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
-            RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.RIGHT;
+    public void initMoveRobot(HardwareMap hardwareMapPorted, Telemetry telemetryPorted){
+        
+        hardwareMap = hardwareMapPorted;
+        telemetry = telemetryPorted;
 
-            RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
-            
-            imu.initialize(new IMU.Parameters(orientationOnRobot));
 
-            imu.resetYaw();
+        // Initializing imu
+        imu = hardwareMap.get(IMU.class, "imu");
+        
+        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
+        RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.RIGHT;
 
-            // Mapping motors
-            rightFrontDriveEx = hwMap.get(DcMotorEx.class, "Motor_Port_0_CH");
-            leftFrontDriveEx = hwMap.get(DcMotorEx.class, "Motor_Port_1_CH");
-            leftBackDriveEx = hwMap.get(DcMotorEx.class, "Motor_Port_2_CH");
-            rightBackDriveEx = hwMap.get(DcMotorEx.class, "Motor_Port_3_CH");
+        RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
+        
+        imu.initialize(new IMU.Parameters(orientationOnRobot));
 
-            leftFrontDriveEx.setDirection(DcMotorEx.Direction.FORWARD);
-            leftBackDriveEx.setDirection(DcMotorEx.Direction.FORWARD);
-            rightFrontDriveEx.setDirection(DcMotorEx.Direction.REVERSE);
-            rightBackDriveEx.setDirection(DcMotorEx.Direction.REVERSE);
+        imu.resetYaw();
+
+        // Mapping motors
+        rightFrontDriveEx = hardwareMap.get(DcMotorEx.class, "Motor_Port_0_CH");
+        leftFrontDriveEx = hardwareMap.get(DcMotorEx.class, "Motor_Port_1_CH");
+        leftBackDriveEx = hardwareMap.get(DcMotorEx.class, "Motor_Port_2_CH");
+        rightBackDriveEx = hardwareMap.get(DcMotorEx.class, "Motor_Port_3_CH");
+
+        leftFrontDriveEx.setDirection(DcMotorEx.Direction.FORWARD);
+        leftBackDriveEx.setDirection(DcMotorEx.Direction.FORWARD);
+        rightFrontDriveEx.setDirection(DcMotorEx.Direction.REVERSE);
+        rightBackDriveEx.setDirection(DcMotorEx.Direction.REVERSE);
     }
 
     public void setSpeed(){
         leftBackDriveEx.setPower(1);
+        telemetry.addData("gyro", imu.getRobotYawPitchRollAngles());
+        telemetry.update();
+        
     }
 
     public void move(double drive, double strafe, double turn, boolean fieldcentric) {
