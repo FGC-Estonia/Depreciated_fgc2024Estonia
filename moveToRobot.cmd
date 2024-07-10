@@ -2,6 +2,8 @@
 
 rem empty the directory
 .\platform-tools\adb shell rm /sdcard/FIRST/java/src/org/firstinspires/ftc/teamcode/*
+.\platform-tools\adb shell rm /sdcard/FIRST/java/srcBackups/*
+
 
 rem push all java files to control hub
 setlocal enabledelayedexpansion
@@ -21,7 +23,7 @@ if 1==0 (
             javac %%f
         )
         
-        rem empty compiled files directory
+        rem empty cq    ompiled files directory
         .\platform-tools\adb shell rm /sdcard/FIRST/java/build/classes/org/firstinspires/ftc/teamcode/*
         
         rem push comipled class files to robot and deletes class files
