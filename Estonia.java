@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode; //type of rev code. opmode is also possible
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name="main")
-public class Main extends LinearOpMode { //file name is Main.java    extends the prebuilt LinearOpMode by rev to run
+@TeleOp(name="Main code Estonia")
+public class Estonia extends LinearOpMode { //file name is Main.java    extends the prebuilt LinearOpMode by rev to run
     /*
     * Import external classes 
     * class name  name to be used in this class; 
