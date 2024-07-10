@@ -18,14 +18,14 @@ public class MoveRobot{
     private IMU imu;
     private HardwareMap hardwareMap;
     private Telemetry telemetry;
-  //  private AprilTagTracker aprilTagTracker;
+    AprilTagTrackerGimbal aprilTagTrackerGimabl;
 
     public void initMoveRobot(HardwareMap hardwareMapPorted, Telemetry telemetryPorted){
         
         hardwareMap = hardwareMapPorted;
         telemetry = telemetryPorted;
-       // aprilTagTracker = new AprilTagTracker(hardwareMap, telemetry);
-        //aprilTagTracker.initAprilTag(hardwareMap, telemetry);
+        aprilTagTrackerGimabl = new AprilTagTrackerGimbal();
+        aprilTagTrackerGimabl.initAprilTag(hardwareMap, telemetry);
 
 
         // Initializing imu
@@ -52,9 +52,8 @@ public class MoveRobot{
         rightBackDriveEx.setDirection(DcMotorEx.Direction.REVERSE);
     }
 
-    public void setSpeed(){
-        telemetry.addData("gyro", imu.getRobotYawPitchRollAngles());
-        telemetry.update();
+    public void testApril(){
+        aprilTagTrackerGimabl.telemetryAprilTag();
         
     }
 
@@ -97,3 +96,4 @@ public class MoveRobot{
         rightFrontDriveEx.setVelocity(rightFrontRawSpeed);
     }
 }
+    

@@ -1,3 +1,4 @@
+package org.firstinspires.ftc.teamcode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -10,14 +11,15 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import java.util.List;
 
 
-public class AprilTagTracker{
+public class AprilTagTrackerGimbal{
     private AprilTagProcessor aprilTag;
     private VisionPortal visionPortal;
     private HardwareMap hardwareMap;
     private Telemetry telemetry;
 
     private static final boolean USE_WEBCAM = true;
-        private void initAprilTag(HardwareMap hardwareMapPorted, Telemetry telemetryPorted) {
+
+        public void initAprilTag(HardwareMap hardwareMapPorted, Telemetry telemetryPorted) {
 
         hardwareMap = hardwareMapPorted;
         telemetry = telemetryPorted;
@@ -88,8 +90,8 @@ public class AprilTagTracker{
     /**
      * Add telemetry about AprilTag detections.
      */
-    private void telemetryAprilTag() {
-
+    public void telemetryAprilTag() {
+        telemetr.addData()
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
         telemetry.addData("# AprilTags Detected", currentDetections.size());
 
@@ -110,6 +112,7 @@ public class AprilTagTracker{
         telemetry.addLine("\nkey:\nXYZ = X (Right), Y (Forward), Z (Up) dist.");
         telemetry.addLine("PRY = Pitch, Roll & Yaw (XYZ Rotation)");
         telemetry.addLine("RBE = Range, Bearing & Elevation");
+        telemetry.update();
 
     }   // end method telemetryAprilTag()
 }
