@@ -36,6 +36,8 @@ public class Estonia extends LinearOpMode { //file name is Main.java    extends 
             double turn = gamepad1.right_stick_x;
 
             moveRobot.move(drive, strafe, turn, true);
+            moveRobot.testApril();
+
 
         }
     }

@@ -91,7 +91,6 @@ public class AprilTagTrackerGimbal{
      * Add telemetry about AprilTag detections.
      */
     public void telemetryAprilTag() {
-        telemetr.addData()
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
         telemetry.addData("# AprilTags Detected", currentDetections.size());
 
@@ -113,6 +112,5 @@ public class AprilTagTrackerGimbal{
         telemetry.addLine("PRY = Pitch, Roll & Yaw (XYZ Rotation)");
         telemetry.addLine("RBE = Range, Bearing & Elevation");
         telemetry.update();
-
     }   // end method telemetryAprilTag()
 }
