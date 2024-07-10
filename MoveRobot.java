@@ -18,14 +18,14 @@ public class MoveRobot{
     private IMU imu;
     private HardwareMap hardwareMap;
     private Telemetry telemetry;
-    private AprilTagTracker aprilTagTracker;
+  //  private AprilTagTracker aprilTagTracker;
 
     public void initMoveRobot(HardwareMap hardwareMapPorted, Telemetry telemetryPorted){
         
         hardwareMap = hardwareMapPorted;
         telemetry = telemetryPorted;
-        aprilTagTracker = new AprilTagTracker(hardwareMap, telemetry);
-        aprilTagTracker.initAprilTag(hardwareMap, telemetry);
+       // aprilTagTracker = new AprilTagTracker(hardwareMap, telemetry);
+        //aprilTagTracker.initAprilTag(hardwareMap, telemetry);
 
 
         // Initializing imu
@@ -59,20 +59,23 @@ public class MoveRobot{
     }
 
     public void move(double drive, double strafe, double turn, boolean fieldcentric) {
+        double x;
+        double y;
+        
         if (fieldcentric) {
             double heading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
-            double x = drive * Math.cos(heading) - strafe * Math.sin(heading);
-            double y = drive * Math.sin(heading) + strafe * Math.cos(heading);
-
-            drive = x;
-            turn = y;
+            x = drive * Math.cos(heading) - strafe * Math.sin(heading);
+            y = drive * Math.sin(heading) + strafe * Math.cos(heading);
+        } else {
+            x = drive;
+            y = strafe;
         }
 
         // Calculates raw power to motors
-        double leftFrontPowerRaw = drive + strafe + turn;
-        double leftBackPowerRaw = drive - strafe + turn;
-        double rightFrontPowerRaw = drive + strafe - turn;
-        double rightBackPowerRaw = drive - strafe - turn;
+        double leftFrontPowerRaw = x + y + turn;
+        double leftBackPowerRaw = x - y + turn;
+        double rightFrontPowerRaw = x - y - turn;
+        double rightBackPowerRaw = x + y - turn;
 
         // Calculate the maximum absolute power value for normalization
         double maxRawPower = Math.max(Math.max(Math.abs(leftFrontPowerRaw), Math.abs(leftBackPowerRaw)),
