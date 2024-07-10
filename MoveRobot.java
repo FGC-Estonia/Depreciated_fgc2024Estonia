@@ -45,4 +45,40 @@ public class MoveRobot{
     public void setSpeed(){
         leftBackDriveEx.setPower(1);
     }
+
+    public void move(double drive, double strafe, double turn, boolean fieldcentric) {
+        if (fieldcentric) {
+            double heading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+            double x = drive * Math.cos(heading) - strafe * Math.sin(heading);
+            double y = drive * Math.sin(heading) + strafe * Math.cos(heading);
+
+            drive = x;
+            turn = y;
+        }
+
+        // Calculates raw power to motors
+        double leftFrontPowerRaw = drive + strafe + turn;
+        double leftBackPowerRaw = drive - strafe + turn;
+        double rightFrontPowerRaw = drive + strafe - turn;
+        double rightBackPowerRaw = drive - strafe - turn;
+
+        // Calculate the maximum absolute power value for normalization
+        double maxRawPower = Math.max(Math.max(Math.abs(leftFrontPowerRaw), Math.abs(leftBackPowerRaw)),
+                Math.max(Math.abs(rightFrontPowerRaw), Math.abs(rightBackPowerRaw)));
+
+        double max = Math.max(maxRawPower, 1.0);
+        double maxradian = 1972.92;
+
+        // Calculate wheel speeds normalized to the wheels.
+        double leftFrontRawSpeed = (leftFrontPowerRaw / max * maxradian / 1.2039);
+        double leftBackRawSpeed = (leftBackPowerRaw / max * maxradian);
+        double rightFrontRawSpeed = (rightFrontPowerRaw / max * maxradian / 1.2039);
+        double rightBackRawSpeed = (rightBackPowerRaw / max * maxradian);
+        
+        // Make wheels go speed
+        leftBackDriveEx.setVelocity(leftBackRawSpeed);
+        leftFrontDriveEx.setVelocity(leftFrontRawSpeed);
+        rightBackDriveEx.setVelocity(rightBackRawSpeed);
+        rightFrontDriveEx.setVelocity(rightFrontRawSpeed);
+    }
 }
