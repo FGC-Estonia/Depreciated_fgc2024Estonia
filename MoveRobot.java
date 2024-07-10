@@ -20,14 +20,13 @@ public class MoveRobot{
 
             // Initializing imu
             imu = hwMap.get(IMU.class, "imu");
+            
+            RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
+            RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.RIGHT;
 
-            IMU.Parameters parameters = new IMU.Parameters();
-            parameters.angleunit = IMU.AngleUnit.Radians;
-            parameters.accelUnit = IMU.AccelUnit.METERS_PERSEC_PERSEC;
-            parameters.RevHubOrientationOnRobot.LogoFacingDirection.UP;
-            parameters.RevHubOrientationOnRobot.UsbFacingDirection.RIGHT;
-
-            imu.initialize(new IMU.Parameters(parameters));
+            RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
+            
+            imu.initialize(new IMU.Parameters(orientationOnRobot));
 
             imu.resetYaw();
 
