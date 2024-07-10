@@ -44,6 +44,8 @@ public class MoveRobot{
 
     public void setSpeed(){
         leftBackDriveEx.setPower(1);
+        telemetry.addData("gyro", imu.getRobotYawPitchRollAngles());
+        telemetry.update();
         
     }
 }
