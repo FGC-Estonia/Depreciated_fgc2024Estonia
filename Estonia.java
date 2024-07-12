@@ -12,6 +12,8 @@ public class Estonia extends LinearOpMode { //file name is Main.java    extends 
     * RunMotor runMotor;
     */
     MoveRobot moveRobot;
+    Presses gamepad1_a;
+
     @Override
     public void runOpMode() {
         /*
@@ -27,6 +29,8 @@ public class Estonia extends LinearOpMode { //file name is Main.java    extends 
          moveRobot =new MoveRobot();
          moveRobot.initMoveRobot(hardwareMap, telemetry);
 
+         gamepad1_a = new Presses();
+
         waitForStart();
         
         while (opModeIsActive()) {
@@ -35,7 +39,7 @@ public class Estonia extends LinearOpMode { //file name is Main.java    extends 
             double strafe = gamepad1.left_stick_x;
             double turn = gamepad1.right_stick_x;
 
-            moveRobot.move(drive, strafe, turn, true);
+            moveRobot.move(drive, strafe, turn, gamepad1_a.toggle(gamepad1.a));
             moveRobot.testApril();
 
 
