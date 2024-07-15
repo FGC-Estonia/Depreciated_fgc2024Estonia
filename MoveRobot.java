@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode;  //place where the code is located
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -14,7 +14,7 @@ public class MoveRobot{
     private DcMotorEx leftBackDriveEx = null;  //  Used to control the left back drive wheel
     private DcMotorEx rightBackDriveEx = null;  //  Used to control the right back drive wheel
     
-    private HardwareMap hwMap = null;
+    private HardwareMap hwMap = null;  //creating objects so that they coul be mapped when initMoveRobot is called by the main programm
     private IMU imu;
     private HardwareMap hardwareMap;
     private Telemetry telemetry;
@@ -22,6 +22,7 @@ public class MoveRobot{
 
     public void initMoveRobot(HardwareMap hardwareMapPorted, Telemetry telemetryPorted){
         
+         //mapping hardwaremap and telemetry as they need to be connected thru the main programm
         hardwareMap = hardwareMapPorted;
         telemetry = telemetryPorted;
         aprilTagTrackerGimabl = new AprilTagTrackerGimbal();
@@ -52,11 +53,13 @@ public class MoveRobot{
         rightBackDriveEx.setDirection(DcMotorEx.Direction.REVERSE);
     }
 
+    // a test to return the apriltag(s) position for testing
     public void testApril(){
         aprilTagTrackerGimabl.telemetryAprilTag();
         
     }
 
+    // the main funrion for moving the robot
     public void move(double drive, double strafe, double turn, boolean fieldcentric) {
         double x;
         double y;

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode;  //place where the code is located
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -12,6 +12,8 @@ import java.util.List;
 
 
 public class AprilTagTrackerGimbal{
+
+    //craating objects so that they could be mapped later on when initAprilTag is called
     private AprilTagProcessor aprilTag;
     private VisionPortal visionPortal;
     private HardwareMap hardwareMap;
