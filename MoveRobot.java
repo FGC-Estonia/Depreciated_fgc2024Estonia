@@ -18,15 +18,21 @@ public class MoveRobot{
     private IMU imu;
     private HardwareMap hardwareMap;
     private Telemetry telemetry;
+
     AprilTagTrackerGimbal aprilTagTrackerGimabl;
+    TractionControl tractionControl;
 
     public void initMoveRobot(HardwareMap hardwareMapPorted, Telemetry telemetryPorted){
         
          //mapping hardwaremap and telemetry as they need to be connected thru the main programm
         hardwareMap = hardwareMapPorted;
         telemetry = telemetryPorted;
+
         aprilTagTrackerGimabl = new AprilTagTrackerGimbal();
         aprilTagTrackerGimabl.initAprilTag(hardwareMap, telemetry);
+
+        tractionControl = new TractionControl()
+        tractionControl.initTractionControl(hardwareMap, telemetry)
 
 
         // Initializing imu
@@ -60,11 +66,11 @@ public class MoveRobot{
     }
 
     // the main funrion for moving the robot
-    public void move(double drive, double strafe, double turn, boolean fieldcentric) {
+    public void move(double drive, double strafe, double turn, boolean fieldCentric, boolean tractionControl) {
         double x;
         double y;
         
-        if (fieldcentric) {
+        if (fieldCentric) {
             double heading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
             x = drive * Math.cos(heading) - strafe * Math.sin(heading);
             y = drive * Math.sin(heading) + strafe * Math.cos(heading);
@@ -92,11 +98,16 @@ public class MoveRobot{
         double rightFrontRawSpeed = (rightFrontPowerRaw / max * maxradian / 1.2039);
         double rightBackRawSpeed = (rightBackPowerRaw / max * maxradian);
         
-        // Make wheels go speed
+        // Make wheels go speed or use traction control
+        if (tractionControl){
+            tractionControl.avoidSlip(leftBackRawSpeed, leftFrontRawSpeed, rightBackRawSpeed, leftFrontRawSpeed)
+
+        } else{
         leftBackDriveEx.setVelocity(leftBackRawSpeed);
         leftFrontDriveEx.setVelocity(leftFrontRawSpeed);
         rightBackDriveEx.setVelocity(rightBackRawSpeed);
         rightFrontDriveEx.setVelocity(rightFrontRawSpeed);
+        }
     }
 }
     
