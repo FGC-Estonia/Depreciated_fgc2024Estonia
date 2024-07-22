@@ -61,4 +61,8 @@ public class Presses{
         
         return toggledVariable;
     }
+    //for easiliy retruning the toggeled state
+    public boolean returnToggleState(){
+        return toggledVariable;
+    }
 }

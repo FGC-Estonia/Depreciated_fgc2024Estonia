@@ -23,9 +23,10 @@ public class MoveRobot{
     TractionControl tractionControl;
 
     private boolean cameraError = false;
+    private boolean imuError = false;
 
     private void initImu(){
-        // Initializing imu
+        // Initializing imu to avoid errors
         imu = hardwareMap.get(IMU.class, "imu");
         
         RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
@@ -48,17 +49,20 @@ public class MoveRobot{
         tractionControl = new TractionControl();
         tractionControl.initTractionControl(hardwareMap, telemetry);
 
-    	try {
+    	try { // init camera with safeguards
             aprilTagTrackerGimabl = new AprilTagTrackerGimbal();
             aprilTagTrackerGimabl.initAprilTag(hardwareMap, telemetry);
         } catch(Exception e) {
             cameraError=true;
-            //  Block of code to handle errors
         }
         
 
-        //init imu
-        initImu();
+        //init imu with safeguards
+        try{
+            initImu();
+        } catch(Exception e) {
+            imuError=true;
+        }
         
         // Mapping motors
         rightFrontDriveEx = hardwareMap.get(DcMotorEx.class, "Motor_Port_0_CH");
@@ -73,7 +77,7 @@ public class MoveRobot{
     }
 
     // a test to return the apriltag(s) position for testing
-    public void testApril(){
+    private void testApril(){
         if (!cameraError){
         aprilTagTrackerGimabl.telemetryAprilTag();
         }
@@ -84,10 +88,14 @@ public class MoveRobot{
         double x;
         double y;
         
-        if (fieldCentric) {
+        if (fieldCentric && !imuError) {
+            try{
             double heading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
             x = drive * Math.cos(heading) - strafe * Math.sin(heading);
             y = drive * Math.sin(heading) + strafe * Math.cos(heading);
+            } catch (Exception e){
+                imuError = true;
+            }
         } else {
             x = drive;
             y = strafe;
@@ -122,6 +130,24 @@ public class MoveRobot{
         rightBackDriveEx.setVelocity(rightBackRawSpeed);
         rightFrontDriveEx.setVelocity(rightFrontRawSpeed);
         }
+
+        try{
+            testApril();
+        } catch(Exception e){
+            cameraError=true;
+        }
+
+
+        if (imuError){
+            telemetry.addData("imu", "error");
+        } else{
+            try{
+              telemetry.addData("imu", imu.getRobotYawPitchRollAngles());
+            } catch(Exception e){
+                imuError=true;
+                }
+        }
+        telemetry.addData("cameraState", Boolean.toString(!cameraError));
     }
 }
     

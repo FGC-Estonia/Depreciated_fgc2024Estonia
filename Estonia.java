@@ -47,9 +47,9 @@ public class Estonia extends LinearOpMode { //file name is Main.java    extends 
                 gamepad1_a.toggle(gamepad1.a), // toggle field centric
                 gamepad1_b.toggle(gamepad1.b) //toggle traction control
                 );
-            moveRobot.testApril();
 
-
+            telemetry.addData("field centric", gamepad1_a.returnToggleState());
+            telemetry.addData("traction control", gamepad1_b.returnToggleState());
         }
     }
 }
