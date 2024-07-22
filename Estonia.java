@@ -31,7 +31,7 @@ public class Estonia extends LinearOpMode { //file name is Main.java    extends 
          moveRobot.initMoveRobot(hardwareMap, telemetry);
 
         gamepad1_a = new Presses();
-        gamepad1_b = new Presses(),
+        gamepad1_b = new Presses();
         gamepad1_b.setToggleFalse();
 
         waitForStart(); //everything has been initialized, waiting for the start button
