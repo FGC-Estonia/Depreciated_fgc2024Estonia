@@ -9,6 +9,9 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 
 public class MoveRobot{
+    double x;
+    double y;
+
     private DcMotorEx leftFrontDriveEx = null;  //  Used to control the left front drive wheel
     private DcMotorEx rightFrontDriveEx = null;  //  Used to control the right front drive wheel
     private DcMotorEx leftBackDriveEx = null;  //  Used to control the left back drive wheel
@@ -85,8 +88,6 @@ public class MoveRobot{
 
     // the main funrion for moving the robot
     public void move(double drive, double strafe, double turn, boolean fieldCentric, boolean tractionControlToggle) {
-        double x;
-        double y;
         
         if (fieldCentric && !imuError) {
             try{
