@@ -54,12 +54,11 @@ public class Presses{
 
     //allows toggeling of a button after presses
     public boolean toggle (boolean inputBoolean){
-        if (pressed(inputBoolean) && toggledVariable == false){
-            toggledVariable=true;
-        } 
-        if (pressed(inputBoolean) && toggledVariable == true){
-            toggledVariable=false;
+        
+        if (pressed(inputBoolean)) {
+            toggledVariable = !toggledVariable;
         }
+        
         return toggledVariable;
     }
 }
