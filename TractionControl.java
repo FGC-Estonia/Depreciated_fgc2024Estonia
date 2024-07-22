@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode;  //place where the code is located
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 
 public class TractionControl{
@@ -36,7 +38,7 @@ public class TractionControl{
         rightBackDriveEx.setDirection(DcMotorEx.Direction.REVERSE);
     }
 
-    public void avoidSlip(double speedLeftBackDrive, double speedLeftFrontDrive, double speedRightBackDrive, double speedRightFrontDrive, hardwareMap){
+    public void avoidSlip(double speedLeftBackDrive, double speedLeftFrontDrive, double speedRightBackDrive, double speedRightFrontDrive){
         double deltaTime = System.currentTimeMillis() - lastTime;
         double deltaSpeedLeftFrontDrive = speedLeftFrontDrive - speedLeftFrontDrive;
         double deltaSpeedLeftBackDrive = speedLeftBackDrive - speedLeftBackDrive;

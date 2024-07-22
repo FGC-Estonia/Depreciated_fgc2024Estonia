@@ -22,19 +22,9 @@ public class MoveRobot{
     AprilTagTrackerGimbal aprilTagTrackerGimabl;
     TractionControl tractionControl;
 
-    public void initMoveRobot(HardwareMap hardwareMapPorted, Telemetry telemetryPorted){
-        
-         //mapping hardwaremap and telemetry as they need to be connected thru the main programm
-        hardwareMap = hardwareMapPorted;
-        telemetry = telemetryPorted;
+    private boolean cameraError = false;
 
-        aprilTagTrackerGimabl = new AprilTagTrackerGimbal();
-        aprilTagTrackerGimabl.initAprilTag(hardwareMap, telemetry);
-
-        tractionControl = new TractionControl()
-        tractionControl.initTractionControl(hardwareMap, telemetry)
-
-
+    private void initImu(){
         // Initializing imu
         imu = hardwareMap.get(IMU.class, "imu");
         
@@ -47,6 +37,29 @@ public class MoveRobot{
 
         imu.resetYaw();
 
+    }
+
+    public void initMoveRobot(HardwareMap hardwareMapPorted, Telemetry telemetryPorted){
+        
+         //mapping hardwaremap and telemetry as they need to be connected thru the main programm
+        hardwareMap = hardwareMapPorted;
+        telemetry = telemetryPorted;
+
+        tractionControl = new TractionControl();
+        tractionControl.initTractionControl(hardwareMap, telemetry);
+
+    	try {
+            aprilTagTrackerGimabl = new AprilTagTrackerGimbal();
+            aprilTagTrackerGimabl.initAprilTag(hardwareMap, telemetry);
+        } catch(Exception e) {
+            cameraError=true;
+            //  Block of code to handle errors
+        }
+        
+
+        //init imu
+        initImu();
+        
         // Mapping motors
         rightFrontDriveEx = hardwareMap.get(DcMotorEx.class, "Motor_Port_0_CH");
         leftFrontDriveEx = hardwareMap.get(DcMotorEx.class, "Motor_Port_1_CH");
@@ -61,12 +74,13 @@ public class MoveRobot{
 
     // a test to return the apriltag(s) position for testing
     public void testApril(){
+        if (!cameraError){
         aprilTagTrackerGimabl.telemetryAprilTag();
-        
+        }
     }
 
     // the main funrion for moving the robot
-    public void move(double drive, double strafe, double turn, boolean fieldCentric, boolean tractionControl) {
+    public void move(double drive, double strafe, double turn, boolean fieldCentric, boolean tractionControlToggle) {
         double x;
         double y;
         
@@ -99,8 +113,8 @@ public class MoveRobot{
         double rightBackRawSpeed = (rightBackPowerRaw / max * maxradian);
         
         // Make wheels go speed or use traction control
-        if (tractionControl){
-            tractionControl.avoidSlip(leftBackRawSpeed, leftFrontRawSpeed, rightBackRawSpeed, leftFrontRawSpeed)
+        if (tractionControlToggle){
+            tractionControl.avoidSlip(leftBackRawSpeed, leftFrontRawSpeed, rightBackRawSpeed, leftFrontRawSpeed);
 
         } else{
         leftBackDriveEx.setVelocity(leftBackRawSpeed);
