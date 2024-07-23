@@ -25,6 +25,7 @@ public class TractionControl{
     public void initTractionControl(HardwareMap hardwareMapPorted, Telemetry telemetryPorted){
         
         hardwareMap=hardwareMapPorted;
+        telemetry=telemetryPorted;
 
         // Mapping motors
         rightFrontDriveEx = hardwareMap.get(DcMotorEx.class, "Motor_Port_0_CH");
@@ -45,20 +46,16 @@ public class TractionControl{
         double deltaSpeedRightFrontDrive = speedRightFrontDrive - speedRightFrontDrive;
         double deltaSpeedRightBackDrive = speedRightBackDrive - speedRightBackDrive;
         double maxDelta = deltaTime * accelerationLimit;
-        double maxMultiplier = 1;
+        
+        double[] maxList = {
+            1.0,
+            Math.abs(deltaSpeedLeftBackDrive / maxDelta),
+            Math.abs(deltaSpeedLeftFrontDrive / maxDelta),
+            Math.abs(deltaSpeedRightBackDrive / maxDelta),
+            Math.abs(deltaSpeedRightFrontDrive / maxDelta)
+            };
 
-        if (Math.abs(deltaSpeedLeftBackDrive / maxDelta) > Math.abs(maxMultiplier)) {
-            maxMultiplier = deltaSpeedLeftBackDrive / maxDelta;
-        }
-        if (Math.abs(deltaSpeedLeftFrontDrive / maxDelta) > Math.abs(maxMultiplier)) {
-            maxMultiplier = deltaSpeedLeftFrontDrive / maxDelta;
-        }
-        if (Math.abs(deltaSpeedRightBackDrive / maxDelta) > Math.abs(maxMultiplier)) {
-            maxMultiplier = deltaSpeedRightBackDrive / maxDelta;
-        }
-        if (Math.abs(deltaSpeedRightFrontDrive / maxDelta) > Math.abs(maxMultiplier)) {
-            maxMultiplier = deltaSpeedRightFrontDrive / maxDelta;
-        }
+        double maxMultiplier = returnMax(maxList);
 
         leftBackDriveEx.setVelocity(speedLeftBackDrive - deltaSpeedLeftBackDrive + deltaSpeedLeftBackDrive / maxMultiplier);
         leftFrontDriveEx.setVelocity(speedLeftFrontDrive - deltaSpeedLeftFrontDrive + deltaSpeedLeftFrontDrive / maxMultiplier);
@@ -70,5 +67,15 @@ public class TractionControl{
         lastSpeedLeftBackDrive = speedLeftBackDrive;
         lastSpeedRightBackDrive = speedRightBackDrive;
         lastSpeedRightFrontDrive = speedRightFrontDrive;
+
+        telemetry.addData("maxMultiplier", maxMultiplier);
+    }
+
+    public double returnMax(double[] intList){
+        double maxInt=0;
+        for (double INT : intList) {
+            maxInt=Math.max(maxInt, INT);
+        }
+        return maxInt;
     }
 }
