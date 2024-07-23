@@ -33,23 +33,36 @@ public class Erection{
         backElevatorEx.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
     }
 
-    public void raise(double joysitck, double rightStick, boolean height100){
-        frontElevatorEx.setPower(joysitck + 0.5*rightStick);
-        backElevatorEx.setPower(-joysitck - 0.5*rightStick);
+    public void raise(double joysitck, double rightStick, boolean height80, boolean height100, boolean height120){
 
+        if (height80){
+            runToHeight(1184);
+        } 
         if (height100){
-            frontElevatorEx.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            backElevatorEx.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            frontElevatorEx.setTargetPosition(1486);//1000(height mm)/(6mm(hex shaft diameter)*3,14)*28(ticks per rotation)
-            backElevatorEx.setTargetPosition(1486);
-            backElevatorEx.setPower(1);
-            frontElevatorEx.setPower(1);
-        } else {
+            runToHeight(1480);
+        } 
+        if (height120){
+            runToHeight(1776);
+        }
+        if (!(height80 || height100 || height120)){
             frontElevatorEx.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             backElevatorEx.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            frontElevatorEx.setPower(joysitck + 0.5*rightStick);
+            backElevatorEx.setPower(-joysitck - 0.5*rightStick);
         }
+
 
         telemetry.addData("motor position", backElevatorEx.getCurrentPosition());
 
     }
+    public void runToHeight(int height){
+            frontElevatorEx.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            backElevatorEx.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            frontElevatorEx.setTargetPosition(height);//1000(height mm)/(6mm(hex shaft diameter)*3,14)*28(ticks per rotation)
+            backElevatorEx.setTargetPosition(height);
+            backElevatorEx.setPower(1);
+            frontElevatorEx.setPower(1);
+    }
+
 }  

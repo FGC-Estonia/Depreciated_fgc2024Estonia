@@ -15,8 +15,9 @@ public class Estonia extends LinearOpMode { //file name is Main.java    extends 
     Presses gamepad1_a;
     Presses gamepad1_b;
     Presses gamepad2_L_bumper;
-    Erection erection;
 
+    Erection erection;
+    
     @Override
     public void runOpMode() {
         /*
@@ -34,7 +35,6 @@ public class Estonia extends LinearOpMode { //file name is Main.java    extends 
 
         gamepad1_a = new Presses();
         gamepad1_b = new Presses();
-        gamepad2_L_bumper = new Presses();
 
         erection = new Erection();
         erection.initErection(hardwareMap, telemetry);
@@ -53,10 +53,13 @@ public class Estonia extends LinearOpMode { //file name is Main.java    extends 
                 gamepad1_b.toggle(gamepad1.b) //toggle traction control
                 );
 
-            erection.raise(gamepad2.left_stick_y,
-             gamepad2.right_stick_y,
-            gamepad2_L_bumper.toggle(gamepad2.left_bumper)
-             );
+            erection.raise(
+                gamepad2.left_stick_y,
+                gamepad2.right_stick_y,
+                gamepad2.a,
+                gamepad2.b,
+                gamepad2.x
+                );
 
             telemetry.addData("field centric", gamepad1_a.returnToggleState());
             telemetry.addData("traction control", gamepad1_b.returnToggleState());
