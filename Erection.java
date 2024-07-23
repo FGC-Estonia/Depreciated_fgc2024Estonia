@@ -14,11 +14,14 @@ public class Erection{
 
     private DcMotorEx frontElevatorEx;
     private DcMotorEx backElevatorEx;
-
+    
+    private boolean isError= false;
+    
     Telemetry telemetry;
     HardwareMap hardwareMap;
 
     public void initErection(HardwareMap hardwareMapPorted, Telemetry telemetryPorted){
+        try{
         hardwareMap = hardwareMapPorted;
         telemetry = telemetryPorted;
 
@@ -31,10 +34,13 @@ public class Erection{
         backElevatorEx.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontElevatorEx.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         backElevatorEx.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        } catch(Exception e){
+            isError=true;
+        }
     }
 
     public void raise(double joysitck, double rightStick, boolean height80, boolean height100, boolean height120){
-
+        if (!isError){
         if (height80){
             runToHeight(1184);
         } 
@@ -54,7 +60,10 @@ public class Erection{
 
 
         telemetry.addData("motor position", backElevatorEx.getCurrentPosition());
-
+        }else{
+            
+            telemetry.addData("erectile disfunction", isError);
+        }
     }
     public void runToHeight(int height){
             frontElevatorEx.setMode(DcMotor.RunMode.RUN_TO_POSITION);

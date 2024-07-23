@@ -123,7 +123,7 @@ public class MoveRobot{
         
         // Make wheels go speed or use traction control
         if (tractionControlToggle){
-            tractionControl.avoidSlip(leftBackRawSpeed, leftFrontRawSpeed, rightBackRawSpeed, leftFrontRawSpeed);
+            tractionControl.avoidSlip(leftBackRawSpeed, leftFrontRawSpeed, rightBackRawSpeed, rightFrontRawSpeed);
 
         } else{
         leftBackDriveEx.setVelocity(leftBackRawSpeed);

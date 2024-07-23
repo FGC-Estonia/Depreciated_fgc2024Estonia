@@ -41,10 +41,10 @@ public class TractionControl{
 
     public void avoidSlip(double speedLeftBackDrive, double speedLeftFrontDrive, double speedRightBackDrive, double speedRightFrontDrive){
         double deltaTime = System.currentTimeMillis() - lastTime;
-        double deltaSpeedLeftFrontDrive = speedLeftFrontDrive - speedLeftFrontDrive;
-        double deltaSpeedLeftBackDrive = speedLeftBackDrive - speedLeftBackDrive;
-        double deltaSpeedRightFrontDrive = speedRightFrontDrive - speedRightFrontDrive;
-        double deltaSpeedRightBackDrive = speedRightBackDrive - speedRightBackDrive;
+        double deltaSpeedLeftFrontDrive = speedLeftFrontDrive - lastSpeedLeftFrontDrive;
+        double deltaSpeedLeftBackDrive = speedLeftBackDrive - lastSpeedLeftBackDrive;
+        double deltaSpeedRightFrontDrive = speedRightFrontDrive - lastSpeedRightFrontDrive;
+        double deltaSpeedRightBackDrive = speedRightBackDrive - lastSpeedRightBackDrive;
         double maxDelta = deltaTime * accelerationLimit;
         
         double[] maxList = {
