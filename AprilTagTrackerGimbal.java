@@ -10,6 +10,8 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 import java.util.List;
 
+import global.first.FeedingTheFutureGameDatabase;
+
 
 public class AprilTagTrackerGimbal{
 
@@ -27,6 +29,8 @@ public class AprilTagTrackerGimbal{
         telemetry = telemetryPorted;
         // Create the AprilTag processor.
         aprilTag = new AprilTagProcessor.Builder()
+            .setTagLibrary(FeedingTheFutureGameDatabase.getFeedingTheFutureTagLibrary())
+            .setOutputUnits(DistanceUnit.CM, AngleUnit.DEGREES)
 
             // The following default settings are available to un-comment and edit as needed.
             //.setDrawAxes(false)

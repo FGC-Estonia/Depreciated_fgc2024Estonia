@@ -14,12 +14,15 @@ public class Erection{
 
     private DcMotorEx frontElevatorEx;
     private DcMotorEx backElevatorEx;
+
+    private DcMotor frontElevator; //DcMotor classes are used as a redundancy so that when the enoders dont work the erection would still work.
+    private DcMotor backElevator;
     
     private boolean isError= false;
-    
+
     Telemetry telemetry;
     HardwareMap hardwareMap;
-
+    
     public void initErection(HardwareMap hardwareMapPorted, Telemetry telemetryPorted){
         try{
         hardwareMap = hardwareMapPorted;

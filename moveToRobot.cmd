@@ -11,6 +11,10 @@ for %%f in (*.java) do (
     .\platform-tools\adb push "%%f" /sdcard/FIRST/java/src/org/firstinspires/ftc/teamcode/
 )
 
+for %%f in (*.jar) do (
+    .\platform-tools\adb push "%%f" /sdcard/FIRST/java/src/org/firstinspires/ftc/teamcode/
+)
+
 
 
 if 1==0 (
