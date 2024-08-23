@@ -1,6 +1,6 @@
 # FGC 2024 Team Estonia codebank
 
-This is the offical FGC 2024 Team Estonia code
+This repo is depreciated, it was used pre android studio
 
 Changes are visible in the changelog
 
